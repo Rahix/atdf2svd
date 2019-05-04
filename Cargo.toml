@@ -1,0 +1,8 @@
+[package]
+name = "atdf2svd"
+version = "0.1.0"
+authors = ["Rahix <rahix@rahix.de>"]
+edition = "2018"
+
+[dependencies]
+structopt = "0.2.15"
