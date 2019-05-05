@@ -1,4 +1,5 @@
 use crate::chip;
+use crate::svd;
 use crate::ElementExt;
 
 pub fn generate(r: &chip::Register, base: usize) -> crate::Result<xmltree::Element> {
@@ -22,6 +23,18 @@ pub fn generate(r: &chip::Register, base: usize) -> crate::Result<xmltree::Eleme
         _ => None,
     } {
         el.child_with_text("access", mode);
+    }
+
+    if r.fields.len() > 0 {
+        let mut fields = xmltree::Element::new("fields");
+
+        fields.children = r
+            .fields
+            .values()
+            .map(svd::field::generate)
+            .collect::<Result<Vec<_>, _>>()?;
+
+        el.children.push(fields);
     }
 
     Ok(el)

@@ -1,6 +1,7 @@
 pub mod chip;
 pub mod peripheral;
 pub mod register;
+pub mod field;
 
 pub fn generate<W: std::io::Write>(c: &crate::chip::Chip, mut w: W) -> crate::Result<()> {
     let tree = chip::generate(c)?;
