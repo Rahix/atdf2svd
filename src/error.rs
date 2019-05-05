@@ -9,6 +9,8 @@ impl<T: Error + 'static> From<T> for Box<dyn Error> {
 }
 
 impl Error for xmltree::ParseError {}
+impl Error for xmltree::Error {}
+impl Error for std::io::Error {}
 impl Error for std::num::ParseIntError {}
 
 #[macro_export]

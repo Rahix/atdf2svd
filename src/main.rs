@@ -4,6 +4,7 @@ pub mod error;
 pub mod atdf;
 pub mod chip;
 pub mod elementext;
+pub mod svd;
 pub mod util;
 
 pub use elementext::ElementExt;
@@ -17,5 +18,10 @@ fn main() {
         std::process::exit(1);
     });
 
-    println!("{:#?}", chip);
+    eprintln!("{:#?}", chip);
+
+    svd::generate(&chip, std::io::stdout()).unwrap_or_else(|e| {
+        eprintln!("{}", e);
+        std::process::exit(1);
+    });
 }

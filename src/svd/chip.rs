@@ -1,0 +1,34 @@
+use crate::chip;
+use crate::svd;
+use crate::ElementExt;
+
+pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
+    let mut el = xmltree::Element::new("device");
+
+    let defaults = [
+        ("vendor", "Atmel"),
+        ("name", c.name.as_ref()),
+        ("addressUnitBits", "8"),
+        ("size", "8"),
+        ("access", "read-write"),
+        ("resetValue", "0"),
+        ("resetMask", "0xff"),
+    ];
+
+    for (name, value) in defaults.iter() {
+        el.children
+            .push(xmltree::Element::new_with_text(name, *value));
+    }
+
+    let mut peripherals = xmltree::Element::new("peripherals");
+
+    peripherals.children = c
+        .peripherals
+        .values()
+        .map(svd::peripheral::generate)
+        .collect::<Result<Vec<_>, _>>()?;
+
+    el.children.push(peripherals);
+
+    Ok(el)
+}
