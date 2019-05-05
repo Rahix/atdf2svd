@@ -10,17 +10,44 @@ pub mod util;
 pub use elementext::ElementExt;
 pub use error::{Error, Result};
 
-fn main() {
-    let b = include_bytes!("../ATtiny85.atdf");
+#[derive(Debug, structopt::StructOpt)]
+struct Options {
+    #[structopt(parse(from_os_str))]
+    atdf_path: std::path::PathBuf,
 
-    let chip = atdf::parse(&b[..]).unwrap_or_else(|e| {
+    #[structopt(parse(from_os_str))]
+    svd_path: Option<std::path::PathBuf>,
+
+    #[structopt(short = "d", long = "debug")]
+    debug: bool,
+}
+
+fn main() {
+    let args: Options = structopt::StructOpt::from_args();
+
+    let atdf_file = std::fs::File::open(args.atdf_path).unwrap_or_else(|e| {
+        eprintln!("{}", e);
+        std::process::exit(1);
+    });
+    let svd_file: Box<dyn std::io::Write> = if let Some(p) = args.svd_path {
+        Box::new(std::fs::File::create(p).unwrap_or_else(|e| {
+            eprintln!("{}", e);
+            std::process::exit(1);
+        }))
+    } else {
+        Box::new(std::io::stdout())
+    };
+
+    let chip = atdf::parse(atdf_file).unwrap_or_else(|e| {
         eprintln!("{}", e);
         std::process::exit(1);
     });
 
-    eprintln!("{:#?}", chip);
+    if args.debug {
+        eprintln!("{:#?}", chip);
+    }
 
-    svd::generate(&chip, std::io::stdout()).unwrap_or_else(|e| {
+    svd::generate(&chip, svd_file).unwrap_or_else(|e| {
         eprintln!("{}", e);
         std::process::exit(1);
     });
