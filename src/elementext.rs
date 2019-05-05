@@ -1,9 +1,19 @@
 //! Extensions to the xmltree::Element for convenience
 
+/// Extensions to the xmltree::Element for convenience
 pub trait ElementExt {
+    /// Create a debug representation of this element
     fn debug(&self) -> String;
+
+    /// Get an attributes' value or error
     fn attr(&self, name: &str) -> crate::Result<&String>;
+
+    /// Get the first child with a certain name or error
     fn first_child(&self, name: &str) -> crate::Result<&Self>;
+
+    /// Get the first child with a certain attribute set
+    ///
+    /// You can optionally specify a name the element should have.
     fn first_child_by_attr(
         &self,
         name: Option<&str>,
@@ -11,8 +21,10 @@ pub trait ElementExt {
         value: &str,
     ) -> crate::Result<&Self>;
 
+    /// Check the name to be the expected value or error
     fn check_name(&self, name: &str) -> crate::Result<()>;
 
+    /// Create a new element with text content
     fn new_with_text<S: Into<String>>(name: &str, text: S) -> Self;
 }
 

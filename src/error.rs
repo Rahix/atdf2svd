@@ -1,5 +1,7 @@
+/// General Error Type/Trait
 pub trait Error: std::error::Error {}
 
+/// Convenience Result Wrapper
 pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 impl<T: Error + 'static> From<T> for Box<dyn Error> {
