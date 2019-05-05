@@ -1,5 +1,7 @@
+use std::collections::HashMap;
 use crate::chip;
 use crate::util;
+use crate::atdf;
 use crate::ElementExt;
 
 pub fn parse(el: &xmltree::Element, offset: usize) -> crate::Result<chip::Register> {
@@ -24,12 +26,18 @@ pub fn parse(el: &xmltree::Element, offset: usize) -> crate::Result<chip::Regist
         chip::AccessMode::ReadWrite
     };
 
+    let fields: HashMap<String, chip::Field> = el.children.iter()
+        .filter(|c| c.name == "bitfield")
+        .map(atdf::field::parse)
+        .map(|r| r.map(|f| (f.name.clone(), f)))
+        .collect::<Result<HashMap<_, _>, _>>()?;
+
     Ok(chip::Register {
         name,
         description,
         address: util::parse_int(el.attr("offset")?)? + offset,
         access,
         restriction: chip::ValueRestriction::Unsafe,
-        fields: std::collections::HashMap::new(),
+        fields,
     })
 }
