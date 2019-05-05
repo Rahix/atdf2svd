@@ -32,9 +32,36 @@ pub enum AccessMode {
 }
 
 #[derive(Debug, Clone)]
+pub enum ValueRestriction {
+    Unsafe,
+    Any,
+    Range(usize, usize),
+    Enumerated(HashMap<String, EnumeratedValue>),
+}
+
+#[derive(Debug, Clone)]
 pub struct Register {
     pub name: String,
     pub description: Option<String>,
     pub address: usize,
     pub access: AccessMode,
+    pub restriction: ValueRestriction,
+
+    pub fields: HashMap<String, Field>,
+}
+
+#[derive(Debug, Clone)]
+pub struct Field {
+    pub name: String,
+    pub description: Option<String>,
+    pub range: (usize, usize),
+    pub access: AccessMode,
+    pub restriction: ValueRestriction,
+}
+
+#[derive(Debug, Clone)]
+pub struct EnumeratedValue {
+    pub name: String,
+    pub description: Option<String>,
+    pub value: usize,
 }
