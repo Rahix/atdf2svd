@@ -1,5 +1,6 @@
 #[macro_use]
 pub mod error;
+pub mod cli;
 
 pub mod atdf;
 pub mod chip;
@@ -20,10 +21,15 @@ struct Options {
 
     #[structopt(short = "d", long = "debug")]
     debug: bool,
+
+    #[structopt(short = "v", long = "verbose")]
+    verbose: bool,
 }
 
 fn main() {
     let args: Options = structopt::StructOpt::from_args();
+
+    cli::setup(args.verbose);
 
     let atdf_file = std::fs::File::open(args.atdf_path).unwrap_or_else(|e| {
         eprintln!("{}", e);

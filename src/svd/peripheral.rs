@@ -13,6 +13,7 @@ pub fn generate(p: &chip::Peripheral) -> crate::Result<xmltree::Element> {
         if let Some(ref desc) = p.description {
             desc.as_ref()
         } else {
+            log::warn!("Description missing for peripheral {:?}", p.name);
             "<TBD>"
         },
     ));

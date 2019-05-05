@@ -3,6 +3,8 @@ use crate::util;
 use crate::ElementExt;
 
 pub fn parse(el: &xmltree::Element, offset: usize) -> crate::Result<chip::Register> {
+    let name = el.attr("name")?.clone();
+
     let description = el
         .attributes
         .get("caption")
@@ -12,7 +14,10 @@ pub fn parse(el: &xmltree::Element, offset: usize) -> crate::Result<chip::Regist
     let access = if let Some(access) = el.attributes.get("ocd-rw") {
         match access.as_ref() {
             "R" => chip::AccessMode::ReadOnly,
-            "" => chip::AccessMode::ReadWrite, // TODO Emit a warning
+            "" => {
+                log::warn!("empty access-mode on {}", el.debug());
+                chip::AccessMode::ReadWrite
+            }
             _ => panic!("unknown access mode {:?}", access),
         }
     } else {
@@ -20,7 +25,7 @@ pub fn parse(el: &xmltree::Element, offset: usize) -> crate::Result<chip::Regist
     };
 
     Ok(chip::Register {
-        name: el.attr("name")?.clone(),
+        name,
         description,
         address: util::parse_int(el.attr("offset")?)? + offset,
         access,

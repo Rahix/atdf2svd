@@ -11,6 +11,7 @@ pub fn generate(r: &chip::Register, base: usize) -> crate::Result<xmltree::Eleme
         if let Some(ref desc) = r.description {
             desc.as_ref()
         } else {
+            log::warn!("Description missing for register {:?}", r.name);
             "<TBD>"
         },
     ));
