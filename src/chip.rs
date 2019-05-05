@@ -18,6 +18,12 @@ pub struct Peripheral {
     pub registers: HashMap<String, Register>,
 }
 
+impl Peripheral {
+    pub fn base_address(&self) -> Option<usize> {
+        self.registers.values().map(|r| r.address).min()
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 pub enum AccessMode {
     ReadOnly,

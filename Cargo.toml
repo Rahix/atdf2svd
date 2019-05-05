@@ -6,3 +6,5 @@ edition = "2018"
 
 [dependencies]
 structopt = "0.2.15"
+xmltree = "0.8.0"
+colored = "1.8.0"
