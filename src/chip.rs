@@ -44,6 +44,7 @@ pub struct Register {
     pub name: String,
     pub description: Option<String>,
     pub address: usize,
+    pub size: usize,
     pub access: AccessMode,
     pub restriction: ValueRestriction,
 

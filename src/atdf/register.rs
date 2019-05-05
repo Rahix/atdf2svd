@@ -36,6 +36,7 @@ pub fn parse(el: &xmltree::Element, offset: usize) -> crate::Result<chip::Regist
         name,
         description,
         address: util::parse_int(el.attr("offset")?)? + offset,
+        size: util::parse_int(el.attr("size")?)?,
         access,
         restriction: chip::ValueRestriction::Unsafe,
         fields,
