@@ -1,4 +1,5 @@
 use crate::chip;
+use crate::svd;
 use crate::ElementExt;
 
 pub fn generate(f: &chip::Field) -> crate::Result<xmltree::Element> {
@@ -15,6 +16,12 @@ pub fn generate(f: &chip::Field) -> crate::Result<xmltree::Element> {
         },
     );
     el.child_with_text("bitRange", format!("[{}:{}]", f.range.1, f.range.0));
+
+    if let Some(a) = svd::restriction::generate_access(&f.access)? {
+        el.children.push(a);
+    }
+
+    el.children.extend(svd::restriction::generate(&f.restriction, f.range.1-f.range.0)?);
 
     Ok(el)
 }

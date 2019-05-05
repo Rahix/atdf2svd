@@ -17,13 +17,11 @@ pub fn generate(r: &chip::Register, base: usize) -> crate::Result<xmltree::Eleme
     );
     el.child_with_text("addressOffset", format!("0x{:X}", r.address - base));
 
-    if let Some(mode) = match r.access {
-        chip::AccessMode::ReadOnly => Some("read-only"),
-        chip::AccessMode::WriteOnly => Some("write-only"),
-        _ => None,
-    } {
-        el.child_with_text("access", mode);
+    if let Some(a) = svd::restriction::generate_access(&r.access)? {
+        el.children.push(a);
     }
+
+    el.children.extend(svd::restriction::generate(&r.restriction, 8)?);
 
     if r.fields.len() > 0 {
         let mut fields = xmltree::Element::new("fields");
