@@ -26,6 +26,9 @@ pub trait ElementExt {
 
     /// Create a new element with text content
     fn new_with_text<S: Into<String>>(name: &str, text: S) -> Self;
+
+    /// Create a new child element with text content
+    fn child_with_text<S: Into<String>>(&mut self, name: &str, text: S);
 }
 
 impl ElementExt for xmltree::Element {
@@ -96,6 +99,11 @@ impl ElementExt for xmltree::Element {
         let mut el = Self::new(name);
         el.text = Some(text.into());
         el
+    }
+
+    fn child_with_text<S: Into<String>>(&mut self, name: &str, text: S) {
+        let child = Self::new_with_text(name, text);
+        self.children.push(child);
     }
 }
 

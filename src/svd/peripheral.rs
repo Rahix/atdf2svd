@@ -6,9 +6,8 @@ pub fn generate(p: &chip::Peripheral) -> crate::Result<xmltree::Element> {
     let mut el = xmltree::Element::new("peripheral");
     let base = p.base_address().expect("todo error");
 
-    el.children
-        .push(xmltree::Element::new_with_text("name", p.name.as_ref()));
-    el.children.push(xmltree::Element::new_with_text(
+    el.child_with_text("name", p.name.as_ref());
+    el.child_with_text(
         "description",
         if let Some(ref desc) = p.description {
             desc.as_ref()
@@ -16,11 +15,8 @@ pub fn generate(p: &chip::Peripheral) -> crate::Result<xmltree::Element> {
             log::warn!("Description missing for peripheral {:?}", p.name);
             "<TBD>"
         },
-    ));
-    el.children.push(xmltree::Element::new_with_text(
-        "baseAddress",
-        format!("0x{:X}", base),
-    ));
+    );
+    el.child_with_text("baseAddress", format!("0x{:X}", base));
 
     let mut registers = xmltree::Element::new("registers");
 

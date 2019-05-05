@@ -16,8 +16,7 @@ pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
     ];
 
     for (name, value) in defaults.iter() {
-        el.children
-            .push(xmltree::Element::new_with_text(name, *value));
+        el.child_with_text(name, *value);
     }
 
     let mut peripherals = xmltree::Element::new("peripherals");
