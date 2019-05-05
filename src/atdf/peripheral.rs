@@ -21,6 +21,10 @@ pub fn parse_list(
             // Find corresponding module
             let module = modules.first_child_by_attr(Some("module"), "name", module_name)?;
 
+            // The register definitions can reference value-groups, that are stored on the same
+            // level as the register-groups, so we parse them in here first.
+            let value_groups = atdf::values::parse_value_groups(module)?;
+
             for register_group in instance
                 .children
                 .iter()
