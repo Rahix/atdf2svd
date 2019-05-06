@@ -31,8 +31,8 @@ fn main() {
 
     cli::setup(args.verbose);
 
-    let atdf_file = std::fs::File::open(args.atdf_path)
-        .unwrap_or_else(|e| cli::exit_with_error(e.into()));
+    let atdf_file =
+        std::fs::File::open(args.atdf_path).unwrap_or_else(|e| cli::exit_with_error(e.into()));
     let svd_file: Box<dyn std::io::Write> = if let Some(p) = args.svd_path {
         Box::new(std::fs::File::create(p).unwrap_or_else(|e| cli::exit_with_error(e.into())))
     } else {

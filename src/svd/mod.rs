@@ -1,7 +1,7 @@
 pub mod chip;
+pub mod field;
 pub mod peripheral;
 pub mod register;
-pub mod field;
 pub mod restriction;
 
 pub fn generate<W: std::io::Write>(c: &crate::chip::Chip, mut w: W) -> crate::Result<()> {

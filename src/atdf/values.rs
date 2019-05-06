@@ -1,13 +1,11 @@
-use std::collections::HashMap;
 use crate::chip;
 use crate::util;
 use crate::ElementExt;
+use std::collections::HashMap;
 
 pub type ValueGroups = HashMap<String, HashMap<String, chip::EnumeratedValue>>;
 
-pub fn parse_value_groups (
-    module_el: &xmltree::Element
-) -> crate::Result<ValueGroups> {
+pub fn parse_value_groups(module_el: &xmltree::Element) -> crate::Result<ValueGroups> {
     // Structure: <value-group>
     //                <value />
     //                ...
@@ -32,8 +30,10 @@ pub fn parse_value_groups (
             enumerated_values.insert(
                 name.clone(),
                 chip::EnumeratedValue {
-                    name, description, value
-                }
+                    name,
+                    description,
+                    value,
+                },
             );
         }
 

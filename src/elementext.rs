@@ -115,7 +115,12 @@ pub mod error {
 
     impl crate::DisplayError for MissingAttribute {
         fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
-            write!(w, "Missing attribute {:?} on\n   {}", self.0, self.1.dimmed())
+            write!(
+                w,
+                "Missing attribute {:?} on\n   {}",
+                self.0,
+                self.1.dimmed()
+            )
         }
     }
 

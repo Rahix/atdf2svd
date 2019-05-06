@@ -11,7 +11,7 @@ impl<E: DisplayError + 'static> From<E> for Error {
     }
 }
 
-pub trait DisplayErrorAuto { }
+pub trait DisplayErrorAuto {}
 
 impl<E: std::fmt::Display + DisplayErrorAuto> DisplayError for E {
     fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
@@ -19,7 +19,7 @@ impl<E: std::fmt::Display + DisplayErrorAuto> DisplayError for E {
     }
 }
 
-impl DisplayErrorAuto for xmltree::ParseError { }
-impl DisplayErrorAuto for xmltree::Error { }
-impl DisplayErrorAuto for std::io::Error { }
-impl DisplayErrorAuto for std::num::ParseIntError { }
+impl DisplayErrorAuto for xmltree::ParseError {}
+impl DisplayErrorAuto for xmltree::Error {}
+impl DisplayErrorAuto for std::io::Error {}
+impl DisplayErrorAuto for std::num::ParseIntError {}

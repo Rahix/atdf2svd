@@ -1,7 +1,10 @@
 use crate::chip;
 use crate::ElementExt;
 
-pub fn generate(restriction: &chip::ValueRestriction, width: usize) -> crate::Result<Vec<xmltree::Element>> {
+pub fn generate(
+    restriction: &chip::ValueRestriction,
+    width: usize,
+) -> crate::Result<Vec<xmltree::Element>> {
     Ok(match restriction {
         chip::ValueRestriction::Unsafe => vec![],
         chip::ValueRestriction::Any => {
@@ -11,11 +14,11 @@ pub fn generate(restriction: &chip::ValueRestriction, width: usize) -> crate::Re
                 let mut el = xmltree::Element::new("writeConstraint");
                 let mut range = xmltree::Element::new("range");
                 range.child_with_text("minimum", 0.to_string());
-                range.child_with_text("maximum", (2usize.pow(width as u32)-1).to_string());
+                range.child_with_text("maximum", (2usize.pow(width as u32) - 1).to_string());
                 el.children.push(range);
                 vec![el]
             }
-        },
+        }
         chip::ValueRestriction::Range(lo, hi) => {
             let mut el = xmltree::Element::new("writeConstraint");
             let mut range = xmltree::Element::new("range");
@@ -23,7 +26,7 @@ pub fn generate(restriction: &chip::ValueRestriction, width: usize) -> crate::Re
             range.child_with_text("maximum", hi.to_string());
             el.children.push(range);
             vec![el]
-        },
+        }
         chip::ValueRestriction::Enumerated(enumerated) => {
             let mut wc = xmltree::Element::new("writeConstraint");
             wc.child_with_text("useEnumeratedValues", "true");
@@ -38,7 +41,7 @@ pub fn generate(restriction: &chip::ValueRestriction, width: usize) -> crate::Re
                 .collect::<Result<_, _>>()?;
 
             vec![wc, values_el]
-        },
+        }
     })
 }
 
@@ -64,7 +67,6 @@ pub fn generate_access(a: &chip::AccessMode) -> crate::Result<Option<xmltree::El
         chip::AccessMode::ReadOnly => Some("read-only"),
         chip::AccessMode::WriteOnly => Some("write-only"),
         chip::AccessMode::ReadWrite => None,
-    }.map(|m| {
-        xmltree::Element::new_with_text("access", m)
-    }))
+    }
+    .map(|m| xmltree::Element::new_with_text("access", m)))
 }

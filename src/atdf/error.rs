@@ -5,7 +5,12 @@ pub struct UnsupportedError(String, String);
 
 impl crate::DisplayError for UnsupportedError {
     fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
-        write!(w, "{} is unsupported in element\n    {}", self.0, self.1.dimmed())
+        write!(
+            w,
+            "{} is unsupported in element\n    {}",
+            self.0,
+            self.1.dimmed()
+        )
     }
 }
 

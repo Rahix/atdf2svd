@@ -1,5 +1,5 @@
-use std::io::Write;
 use colored::Colorize;
+use std::io::Write;
 
 pub fn setup(verbose: bool) {
     env_logger::Builder::new()
