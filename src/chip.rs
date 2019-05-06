@@ -60,6 +60,12 @@ pub struct Field {
     pub restriction: ValueRestriction,
 }
 
+impl Field {
+    pub fn width(&self) -> usize {
+        self.range.1 - self.range.0 + 1
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct EnumeratedValue {
     pub name: String,
