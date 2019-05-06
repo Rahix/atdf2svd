@@ -28,15 +28,16 @@ pub fn generate(r: &chip::Register, base: usize) -> crate::Result<xmltree::Eleme
     el.children.extend(svd::restriction::generate(&r.restriction, r.size * 8)?);
 
     if r.fields.len() > 0 {
-        let mut fields = xmltree::Element::new("fields");
+        let mut fields_el = xmltree::Element::new("fields");
 
-        fields.children = r
-            .fields
-            .values()
+        let mut fields: Vec<_> = r.fields.values().collect();
+        fields.sort_by(|a, b| a.range.0.cmp(&b.range.0));
+        fields_el.children = fields
+            .into_iter()
             .map(svd::field::generate)
             .collect::<Result<Vec<_>, _>>()?;
 
-        el.children.push(fields);
+        el.children.push(fields_el);
     }
 
     Ok(el)
