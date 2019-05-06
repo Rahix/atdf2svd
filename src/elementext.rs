@@ -109,65 +109,47 @@ impl ElementExt for xmltree::Element {
 
 pub mod error {
     use super::ElementExt;
-    use std::fmt;
+    use colored::Colorize;
 
-    impl_error! {
-        pub struct MissingAttribute {
-            pub attr: String,
-            pub element: String,
-        }
+    pub struct MissingAttribute(String, String);
 
-        fn fmt(&self, f) {
-            write!(f, "attribute {:?} missing on {}", self.attr, self.element)
+    impl crate::DisplayError for MissingAttribute {
+        fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
+            write!(w, "Missing attribute {:?} on\n   {}", self.0, self.1.dimmed())
         }
     }
 
     impl MissingAttribute {
         pub fn new<S: Into<String>>(attr: S, el: &xmltree::Element) -> Self {
-            MissingAttribute {
-                attr: attr.into(),
-                element: el.debug(),
-            }
+            MissingAttribute(attr.into(), el.debug())
         }
     }
 
-    impl_error! {
-        pub struct MissingElement {
-            pub name: String,
-            pub parent: String,
-        }
+    pub struct MissingElement(String, String);
 
-        fn fmt(&self, f) {
-            write!(f, "element {:?} missing in {}", self.name, self.parent)
+    impl crate::DisplayError for MissingElement {
+        fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
+            write!(w, "Missing child {:?} in\n   {}", self.0, self.1.dimmed())
         }
     }
 
     impl MissingElement {
         pub fn new<S: Into<String>>(name: S, el: &xmltree::Element) -> Self {
-            MissingElement {
-                name: name.into(),
-                parent: el.debug(),
-            }
+            MissingElement(name.into(), el.debug())
         }
     }
 
-    impl_error! {
-        pub struct WrongName {
-            pub expected: String,
-            pub element: String,
-        }
+    pub struct WrongName(String, String);
 
-        fn fmt(&self, f) {
-            write!(f, "wrong name: expected {:?} but got {}", self.expected, self.element)
+    impl crate::DisplayError for WrongName {
+        fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
+            write!(w, "Expected {:?} but got\n   {}", self.0, self.1.dimmed())
         }
     }
 
     impl WrongName {
-        pub fn new<S: Into<String>>(expected: S, el: &xmltree::Element) -> Self {
-            WrongName {
-                expected: expected.into(),
-                element: el.debug(),
-            }
+        pub fn new<S: Into<String>>(name: S, el: &xmltree::Element) -> Self {
+            WrongName(name.into(), el.debug())
         }
     }
 }

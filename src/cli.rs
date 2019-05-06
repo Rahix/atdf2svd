@@ -1,3 +1,6 @@
+use std::io::Write;
+use colored::Colorize;
+
 pub fn setup(verbose: bool) {
     env_logger::Builder::new()
         .filter_level(if verbose {
@@ -6,9 +9,7 @@ pub fn setup(verbose: bool) {
             log::LevelFilter::Warn
         })
         .format(|f, r| {
-            use colored::Colorize;
             use log::Level::*;
-            use std::io::Write;
 
             writeln!(
                 f,
@@ -24,4 +25,12 @@ pub fn setup(verbose: bool) {
             )
         })
         .init();
+}
+
+pub fn exit_with_error(e: crate::Error) -> ! {
+    let mut stderr = std::io::stderr();
+    write!(stderr, "{}: ", "Error".red().bold()).unwrap();
+    e.format(&mut stderr).unwrap();
+    write!(stderr, "\n").unwrap();
+    std::process::exit(1);
 }

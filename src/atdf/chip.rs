@@ -6,7 +6,7 @@ pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {
     let devices = el.first_child("devices")?;
     if devices.children.len() != 1 {
         return Err(
-            atdf::error::UnsupportedError::new("more than one device definition", el).into(),
+            atdf::error::UnsupportedError::new("more than one device definition", devices).into(),
         );
     }
 

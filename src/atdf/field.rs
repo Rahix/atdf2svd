@@ -17,8 +17,9 @@ pub fn parse(bitfield_el: &xmltree::Element) -> crate::Result<chip::Field> {
     // The range is defined by a mask.
     // Not that in some cases there are bits withing this range, that do not belong to this mask
     // (e.g. 0b00010010). Then the value restriction is unsafe.
-    let (range, unsafe_range) = util::parse_mask(bitfield_el.attr("mask")?)?
-        .ok_or_else(|| atdf::error::UnsupportedError::new("mask", bitfield_el))?;
+    let mask = bitfield_el.attr("mask")?;
+    let (range, unsafe_range) = util::parse_mask(mask)?
+        .ok_or_else(|| atdf::error::UnsupportedError::new(format!("mask {:?}", mask), bitfield_el))?;
 
     let restriction = if unsafe_range {
         chip::ValueRestriction::Unsafe

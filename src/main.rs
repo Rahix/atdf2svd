@@ -9,7 +9,7 @@ pub mod svd;
 pub mod util;
 
 pub use elementext::ElementExt;
-pub use error::{Error, Result};
+pub use error::{DisplayError, Error, Result};
 
 #[derive(Debug, structopt::StructOpt)]
 struct Options {
@@ -31,30 +31,19 @@ fn main() {
 
     cli::setup(args.verbose);
 
-    let atdf_file = std::fs::File::open(args.atdf_path).unwrap_or_else(|e| {
-        eprintln!("{}", e);
-        std::process::exit(1);
-    });
+    let atdf_file = std::fs::File::open(args.atdf_path)
+        .unwrap_or_else(|e| cli::exit_with_error(e.into()));
     let svd_file: Box<dyn std::io::Write> = if let Some(p) = args.svd_path {
-        Box::new(std::fs::File::create(p).unwrap_or_else(|e| {
-            eprintln!("{}", e);
-            std::process::exit(1);
-        }))
+        Box::new(std::fs::File::create(p).unwrap_or_else(|e| cli::exit_with_error(e.into())))
     } else {
         Box::new(std::io::stdout())
     };
 
-    let chip = atdf::parse(atdf_file).unwrap_or_else(|e| {
-        eprintln!("{}", e);
-        std::process::exit(1);
-    });
+    let chip = atdf::parse(atdf_file).unwrap_or_else(|e| cli::exit_with_error(e.into()));
 
     if args.debug {
         eprintln!("{:#?}", chip);
     }
 
-    svd::generate(&chip, svd_file).unwrap_or_else(|e| {
-        eprintln!("{}", e);
-        std::process::exit(1);
-    });
+    svd::generate(&chip, svd_file).unwrap_or_else(|e| cli::exit_with_error(e.into()));
 }

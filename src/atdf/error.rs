@@ -1,22 +1,16 @@
 use crate::ElementExt;
-use std::fmt;
+use colored::Colorize;
 
-impl_error! {
-    pub struct UnsupportedError {
-        pub what: String,
-        pub element: String,
-    }
+pub struct UnsupportedError(String, String);
 
-    fn fmt(&self, f) {
-        write!(f, "{} is unsupported (at {})", self.what, self.element)
+impl crate::DisplayError for UnsupportedError {
+    fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
+        write!(w, "{} is unsupported in element\n    {}", self.0, self.1.dimmed())
     }
 }
 
 impl UnsupportedError {
     pub fn new<S: Into<String>>(what: S, el: &xmltree::Element) -> Self {
-        UnsupportedError {
-            what: what.into(),
-            element: el.debug(),
-        }
+        UnsupportedError(what.into(), el.debug())
     }
 }
