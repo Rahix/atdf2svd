@@ -3,10 +3,11 @@ use crate::chip;
 use crate::util;
 use crate::ElementExt;
 
+pub type ValueGroups = HashMap<String, HashMap<String, chip::EnumeratedValue>>;
 
 pub fn parse_value_groups (
     module_el: &xmltree::Element
-) -> crate::Result<HashMap<String, HashMap<String, chip::EnumeratedValue>>> {
+) -> crate::Result<ValueGroups> {
     // Structure: <value-group>
     //                <value />
     //                ...

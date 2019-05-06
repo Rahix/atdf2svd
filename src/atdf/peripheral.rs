@@ -36,7 +36,7 @@ pub fn parse_list(
                 let group = module.first_child_by_attr(Some("register-group"), "name", name)?;
 
                 for register in group.children.iter() {
-                    registers.push(atdf::register::parse(register, offset)?);
+                    registers.push(atdf::register::parse(register, offset, &value_groups)?);
                 }
             }
 

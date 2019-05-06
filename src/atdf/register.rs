@@ -4,7 +4,7 @@ use crate::util;
 use crate::atdf;
 use crate::ElementExt;
 
-pub fn parse(el: &xmltree::Element, offset: usize) -> crate::Result<chip::Register> {
+pub fn parse(el: &xmltree::Element, offset: usize, values: &atdf::values::ValueGroups) -> crate::Result<chip::Register> {
     let name = el.attr("name")?.clone();
 
     let description = el
@@ -28,7 +28,7 @@ pub fn parse(el: &xmltree::Element, offset: usize) -> crate::Result<chip::Regist
 
     let fields: HashMap<String, chip::Field> = el.children.iter()
         .filter(|c| c.name == "bitfield")
-        .map(atdf::field::parse)
+        .map(|e| atdf::field::parse(e, values))
         .map(|r| r.map(|f| (f.name.clone(), f)))
         .collect::<Result<HashMap<_, _>, _>>()?;
 
