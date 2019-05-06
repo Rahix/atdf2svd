@@ -25,8 +25,11 @@ pub fn generate(r: &chip::Register, base: usize) -> crate::Result<xmltree::Eleme
         el.children.push(a);
     }
 
-    el.children
-        .extend(svd::restriction::generate(&r.restriction, r.size * 8)?);
+    el.children.extend(svd::restriction::generate(
+        &r.restriction,
+        r.size * 8,
+        &r.name,
+    )?);
 
     if r.fields.len() > 0 {
         let mut fields_el = xmltree::Element::new("fields");

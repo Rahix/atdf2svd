@@ -21,8 +21,11 @@ pub fn generate(f: &chip::Field) -> crate::Result<xmltree::Element> {
         el.children.push(a);
     }
 
-    el.children
-        .extend(svd::restriction::generate(&f.restriction, f.width())?);
+    el.children.extend(svd::restriction::generate(
+        &f.restriction,
+        f.width(),
+        &f.name,
+    )?);
 
     Ok(el)
 }

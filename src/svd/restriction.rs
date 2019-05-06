@@ -4,6 +4,7 @@ use crate::ElementExt;
 pub fn generate(
     restriction: &chip::ValueRestriction,
     width: usize,
+    name: &str,
 ) -> crate::Result<Vec<xmltree::Element>> {
     Ok(match restriction {
         chip::ValueRestriction::Unsafe => vec![],
@@ -37,6 +38,11 @@ pub fn generate(
             values.sort_by(|v1, v2| v1.value.cmp(&v2.value));
             values_el.children = values
                 .into_iter()
+                .inspect(|v| {
+                    if v.name.starts_with("VAL_0x") {
+                        log::info!("Undescriptive name {:?} in {:?}", v.name, name);
+                    }
+                })
                 .map(generate_enumerated)
                 .collect::<Result<_, _>>()?;
 
