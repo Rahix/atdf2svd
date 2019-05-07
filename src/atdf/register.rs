@@ -44,7 +44,11 @@ pub fn parse(
         address: util::parse_int(el.attr("offset")?)? + offset,
         size: util::parse_int(el.attr("size")?)?,
         access,
-        restriction: chip::ValueRestriction::Unsafe,
+        restriction: if fields.len() == 0 {
+            chip::ValueRestriction::Any
+        } else {
+            chip::ValueRestriction::Unsafe
+        },
         fields,
     })
 }
