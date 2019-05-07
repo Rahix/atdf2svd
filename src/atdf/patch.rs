@@ -45,6 +45,8 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
             }
 
             reg.fields = fields.clone();
+            // Ensure that direct access to the register is unsafe
+            reg.restriction = chip::ValueRestriction::Unsafe;
         }
     }
     Ok(())
