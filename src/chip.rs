@@ -8,6 +8,7 @@ pub struct Chip {
     pub version: Option<String>,
 
     pub peripherals: HashMap<String, Peripheral>,
+    pub interrupts: HashMap<String, Interrupt>,
 }
 
 #[derive(Debug, Clone)]
@@ -22,6 +23,13 @@ impl Peripheral {
     pub fn base_address(&self) -> Option<usize> {
         self.registers.values().map(|r| r.address).min()
     }
+}
+
+#[derive(Debug, Clone)]
+pub struct Interrupt {
+    pub name: String,
+    pub description: Option<String>,
+    pub index: usize,
 }
 
 #[derive(Debug, Clone, Copy)]
