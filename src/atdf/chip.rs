@@ -20,11 +20,20 @@ pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {
     .map(|p| (p.name.clone(), p))
     .collect();
 
+    let interrupts = device
+        .first_child("interrupts")?
+        .children
+        .iter()
+        .map(atdf::interrupt::parse)
+        .map(|r| r.map(|int| (int.name.clone(), int)))
+        .collect::<Result<_, _>>()?;
+
     Ok(chip::Chip {
         name: device.attr("name")?.clone(),
         description: None,
         vendor: None,
         version: None,
         peripherals,
+        interrupts,
     })
 }

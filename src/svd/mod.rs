@@ -3,6 +3,7 @@ pub mod field;
 pub mod peripheral;
 pub mod register;
 pub mod restriction;
+pub mod interrupt;
 
 pub fn generate<W: std::io::Write>(c: &crate::chip::Chip, mut w: W) -> crate::Result<()> {
     let tree = chip::generate(c)?;

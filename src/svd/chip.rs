@@ -27,6 +27,8 @@ pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
         .map(svd::peripheral::generate)
         .collect::<Result<Vec<_>, _>>()?;
 
+    svd::interrupt::generate(&mut peripherals, c)?;
+
     el.children.push(peripherals);
 
     Ok(el)
