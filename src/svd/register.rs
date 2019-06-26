@@ -5,7 +5,7 @@ use crate::ElementExt;
 pub fn generate(r: &chip::Register, base: usize) -> crate::Result<xmltree::Element> {
     let mut el = xmltree::Element::new("register");
 
-    el.child_with_text("name", r.name.as_ref());
+    el.child_with_text("name", r.name.clone());
     el.child_with_text(
         "description",
         if let Some(ref desc) = r.description {

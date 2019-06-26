@@ -19,7 +19,7 @@ pub fn generate(peripherals: &mut xmltree::Element, c: &chip::Chip) -> crate::Re
 
                     int.child_with_text(
                         "name",
-                        interrupt.name.as_ref(),
+                        interrupt.name.clone(),
                     );
                     int.child_with_text(
                         "value",
@@ -53,7 +53,7 @@ pub fn generate(peripherals: &mut xmltree::Element, c: &chip::Chip) -> crate::Re
 struct NoCPUPeripheral;
 
 impl DisplayError for NoCPUPeripheral {
-    fn format(&self, w: &mut std::io::Write) -> std::io::Result<()> {
+    fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
         write!(
             w,
             "No `CPU` peripheral found, to which interrupts can be added!"

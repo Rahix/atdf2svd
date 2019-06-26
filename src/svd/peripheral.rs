@@ -6,7 +6,7 @@ pub fn generate(p: &chip::Peripheral) -> crate::Result<xmltree::Element> {
     let mut el = xmltree::Element::new("peripheral");
     let base = p.base_address().expect("todo error");
 
-    el.child_with_text("name", p.name.as_ref());
+    el.child_with_text("name", p.name.clone());
     el.child_with_text(
         "description",
         if let Some(ref desc) = p.description {

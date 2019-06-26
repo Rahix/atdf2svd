@@ -53,7 +53,7 @@ pub fn generate(
 
 pub fn generate_enumerated(e: &chip::EnumeratedValue) -> crate::Result<xmltree::Element> {
     let mut el = xmltree::Element::new("enumeratedValue");
-    el.child_with_text("name", e.name.as_ref());
+    el.child_with_text("name", e.name.clone());
     el.child_with_text(
         "description",
         if let Some(ref desc) = e.description {
