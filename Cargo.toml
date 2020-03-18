@@ -1,6 +1,6 @@
 [package]
 name = "atdf2svd"
-version = "0.1.0"
+version = "0.1.2"
 authors = ["Rahix <rahix@rahix.de>"]
 description = "Tool to convert Atmel's ATDF files to SVD"
 readme = "README.md"
