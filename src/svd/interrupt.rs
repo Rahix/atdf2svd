@@ -13,35 +13,26 @@ pub fn generate(peripherals: &mut xmltree::Element, c: &chip::Chip) -> crate::Re
         {
             let mut interrupts = c.interrupts.values().collect::<Vec<_>>();
             interrupts.sort_by(|a, b| a.index.cmp(&b.index));
-            let el_interrupts = interrupts.into_iter()
-                .map(|interrupt| {
-                    let mut int = xmltree::Element::new("interrupt");
+            let el_interrupts = interrupts.into_iter().map(|interrupt| {
+                let mut int = xmltree::Element::new("interrupt");
 
-                    int.child_with_text(
-                        "name",
-                        interrupt.name.clone(),
-                    );
-                    int.child_with_text(
-                        "value",
-                        interrupt.index.to_string(),
-                    );
+                int.child_with_text("name", interrupt.name.clone());
+                int.child_with_text("value", interrupt.index.to_string());
 
-                    int.child_with_text(
-                        "description",
-                        if let Some(ref desc) = interrupt.description {
-                            desc.as_ref()
-                        } else {
-                            log::warn!("Description missing for field {:?}", interrupt.name);
-                            "<TBD>"
-                        },
-                    );
+                int.child_with_text(
+                    "description",
+                    if let Some(ref desc) = interrupt.description {
+                        desc.as_ref()
+                    } else {
+                        log::warn!("Description missing for field {:?}", interrupt.name);
+                        "<TBD>"
+                    },
+                );
 
-                    int
-                });
+                int
+            });
 
-            peripheral
-                .children
-                .extend(el_interrupts);
+            peripheral.children.extend(el_interrupts);
 
             return Ok(());
         }
