@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 #[derive(Debug, Clone)]
 pub struct Chip {
@@ -7,8 +7,8 @@ pub struct Chip {
     pub vendor: Option<String>,
     pub version: Option<String>,
 
-    pub peripherals: HashMap<String, Peripheral>,
-    pub interrupts: HashMap<String, Interrupt>,
+    pub peripherals: BTreeMap<String, Peripheral>,
+    pub interrupts: BTreeMap<String, Interrupt>,
 }
 
 #[derive(Debug, Clone)]
@@ -16,7 +16,7 @@ pub struct Peripheral {
     pub name: String,
     pub description: Option<String>,
 
-    pub registers: HashMap<String, Register>,
+    pub registers: BTreeMap<String, Register>,
 }
 
 impl Peripheral {
@@ -44,7 +44,7 @@ pub enum ValueRestriction {
     Unsafe,
     Any,
     Range(usize, usize),
-    Enumerated(HashMap<String, EnumeratedValue>),
+    Enumerated(BTreeMap<String, EnumeratedValue>),
 }
 
 #[derive(Debug, Clone)]
@@ -56,7 +56,7 @@ pub struct Register {
     pub access: AccessMode,
     pub restriction: ValueRestriction,
 
-    pub fields: HashMap<String, Field>,
+    pub fields: BTreeMap<String, Field>,
 }
 
 #[derive(Debug, Clone)]

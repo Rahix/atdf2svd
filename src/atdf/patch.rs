@@ -2,7 +2,7 @@
 use crate::chip;
 use crate::util;
 use crate::ElementExt;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) -> crate::Result<()> {
     let port_module = tree
@@ -27,7 +27,7 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
             .map(|r| r.and_then(|s| util::parse_int(s)))
             .collect::<Result<_, _>>()?;
 
-        let fields: HashMap<String, chip::Field> = pins
+        let fields: BTreeMap<String, chip::Field> = pins
             .into_iter()
             .map(|p| chip::Field {
                 name: format!("P{}{}", name, p),

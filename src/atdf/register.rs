@@ -2,7 +2,7 @@ use crate::atdf;
 use crate::chip;
 use crate::util;
 use crate::ElementExt;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 pub fn parse(
     el: &xmltree::Element,
@@ -30,13 +30,13 @@ pub fn parse(
         chip::AccessMode::ReadWrite
     };
 
-    let fields: HashMap<String, chip::Field> = el
+    let fields: BTreeMap<String, chip::Field> = el
         .children
         .iter()
         .filter(|c| c.name == "bitfield")
         .map(|e| atdf::field::parse(e, values))
         .map(|r| r.map(|f| (f.name.clone(), f)))
-        .collect::<Result<HashMap<_, _>, _>>()?;
+        .collect::<Result<BTreeMap<_, _>, _>>()?;
 
     Ok(chip::Register {
         name,

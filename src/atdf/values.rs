@@ -1,9 +1,9 @@
 use crate::chip;
 use crate::util;
 use crate::ElementExt;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
-pub type ValueGroups = HashMap<String, HashMap<String, chip::EnumeratedValue>>;
+pub type ValueGroups = BTreeMap<String, BTreeMap<String, chip::EnumeratedValue>>;
 
 pub fn parse_value_groups(module_el: &xmltree::Element) -> crate::Result<ValueGroups> {
     // Structure: <value-group>
@@ -11,7 +11,7 @@ pub fn parse_value_groups(module_el: &xmltree::Element) -> crate::Result<ValueGr
     //                ...
     //            </value-group>
 
-    let mut value_groups = HashMap::new();
+    let mut value_groups = BTreeMap::new();
     for value_group_el in module_el
         .children
         .iter()
@@ -19,7 +19,7 @@ pub fn parse_value_groups(module_el: &xmltree::Element) -> crate::Result<ValueGr
     {
         let group_name = value_group_el.attr("name")?.clone();
 
-        let mut enumerated_values = HashMap::new();
+        let mut enumerated_values = BTreeMap::new();
         for value_el in value_group_el.children.iter() {
             value_el.check_name("value")?;
 
