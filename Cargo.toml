@@ -2,6 +2,11 @@
 name = "atdf2svd"
 version = "0.1.0"
 authors = ["Rahix <rahix@rahix.de>"]
+description = "Tool to convert Atmel's ATDF files to SVD"
+license = "GPL-3.0-only"
+documentation = "https://github.com/Rahix/atdf2svd"
+homepage = "https://github.com/Rahix/atdf2svd"
+repository = "https://github.com/Rahix/atdf2svd"
 edition = "2018"
 
 [dependencies]
