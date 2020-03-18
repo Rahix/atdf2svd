@@ -39,11 +39,11 @@ fn main() {
         Box::new(std::io::stdout())
     };
 
-    let chip = atdf::parse(atdf_file).unwrap_or_else(|e| cli::exit_with_error(e.into()));
+    let chip = atdf::parse(atdf_file).unwrap_or_else(|e| cli::exit_with_error(e));
 
     if args.debug {
         eprintln!("{:#?}", chip);
     }
 
-    svd::generate(&chip, svd_file).unwrap_or_else(|e| cli::exit_with_error(e.into()));
+    svd::generate(&chip, svd_file).unwrap_or_else(|e| cli::exit_with_error(e));
 }

@@ -69,7 +69,7 @@ impl ElementExt for xmltree::Element {
     ) -> crate::Result<&Self> {
         self.children
             .iter()
-            .filter(|c| {
+            .find(|c| {
                 if let Some(n) = name {
                     if n != c.name {
                         return false;
@@ -77,7 +77,6 @@ impl ElementExt for xmltree::Element {
                 }
                 c.attributes.get(attr) == Some(&value.into())
             })
-            .next()
             .ok_or_else(|| {
                 error::MissingElement::new(
                     format!("<{} {}='{}'>", name.unwrap_or("???"), attr, value),

@@ -5,12 +5,13 @@ use crate::DisplayError;
 pub fn generate(peripherals: &mut xmltree::Element, c: &chip::Chip) -> crate::Result<()> {
     // Find the (first) peripheral with the name `CPU` to then add the interrupts to it.
     for peripheral in peripherals.children.iter_mut() {
-        if peripheral.get_child("name".to_string()).and_then(|e| {
+        let name = peripheral.get_child("name".to_string()).and_then(|e| {
             // Once `inner_deref` is stabilized, this can be changed to
             // e.text.deref() or e.text.as_deref(), depending on the final name
             e.text.as_ref().map(|s| s.as_ref())
-        }) == Some("CPU")
-        {
+        });
+
+        if let Some("CPU") = name {
             let mut interrupts = c.interrupts.values().collect::<Vec<_>>();
             interrupts.sort_by(|a, b| a.index.cmp(&b.index));
             let el_interrupts = interrupts.into_iter().map(|interrupt| {

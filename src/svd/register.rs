@@ -21,7 +21,7 @@ pub fn generate(r: &chip::Register, base: usize) -> crate::Result<xmltree::Eleme
         el.child_with_text("size", (r.size * 8).to_string());
     }
 
-    if let Some(a) = svd::restriction::generate_access(&r.access)? {
+    if let Some(a) = svd::restriction::generate_access(r.access)? {
         el.children.push(a);
     }
 

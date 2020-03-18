@@ -68,7 +68,7 @@ pub fn generate_enumerated(e: &chip::EnumeratedValue) -> crate::Result<xmltree::
     Ok(el)
 }
 
-pub fn generate_access(a: &chip::AccessMode) -> crate::Result<Option<xmltree::Element>> {
+pub fn generate_access(a: chip::AccessMode) -> crate::Result<Option<xmltree::Element>> {
     Ok(match a {
         chip::AccessMode::ReadOnly => Some("read-only"),
         chip::AccessMode::WriteOnly => Some("write-only"),

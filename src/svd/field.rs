@@ -17,7 +17,7 @@ pub fn generate(f: &chip::Field) -> crate::Result<xmltree::Element> {
     );
     el.child_with_text("bitRange", format!("[{}:{}]", f.range.1, f.range.0));
 
-    if let Some(a) = svd::restriction::generate_access(&f.access)? {
+    if let Some(a) = svd::restriction::generate_access(f.access)? {
         el.children.push(a);
     }
 
