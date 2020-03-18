@@ -12,6 +12,7 @@ pub use elementext::ElementExt;
 pub use error::{DisplayError, Error, Result};
 
 #[derive(Debug, structopt::StructOpt)]
+/// A tool to convert AVR chip description files (.atdf) to SVD.
 struct Options {
     #[structopt(parse(from_os_str))]
     atdf_path: std::path::PathBuf,
