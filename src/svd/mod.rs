@@ -11,7 +11,7 @@ pub fn generate<W: std::io::Write>(c: &crate::chip::Chip, mut w: W) -> crate::Re
     let config = xmltree::EmitterConfig::new().perform_indent(true);
 
     tree.write_with_config(&mut w, config)?;
-    write!(&mut w, "\n")?;
+    writeln!(&mut w)?;
 
     Ok(())
 }

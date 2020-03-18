@@ -21,7 +21,7 @@ pub fn parse_mask(s: &str) -> crate::Result<Option<((usize, usize), bool)>> {
     let bits_set = (0..mem::size_of::<usize>()).filter(|i| (mask & (1 << *i)) > 0);
     let range = (bits_set.clone().min().unwrap(), bits_set.max().unwrap());
 
-    let range_bitmask = (1 << (range.1 - range.0 + 1)) - 1 << range.0;
+    let range_bitmask = ((1 << (range.1 - range.0 + 1)) - 1) << range.0;
     let has_intermediate = range_bitmask ^ mask != 0;
 
     Ok(Some((range, has_intermediate)))

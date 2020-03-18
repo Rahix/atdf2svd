@@ -31,7 +31,7 @@ pub fn generate(r: &chip::Register, base: usize) -> crate::Result<xmltree::Eleme
         &r.name,
     )?);
 
-    if r.fields.len() > 0 {
+    if !r.fields.is_empty() {
         let mut fields_el = xmltree::Element::new("fields");
 
         let mut fields: Vec<_> = r.fields.values().collect();

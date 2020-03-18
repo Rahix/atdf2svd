@@ -31,6 +31,6 @@ pub fn exit_with_error(e: crate::Error) -> ! {
     let mut stderr = std::io::stderr();
     write!(stderr, "{}: ", "Error".red().bold()).unwrap();
     e.format(&mut stderr).unwrap();
-    write!(stderr, "\n").unwrap();
+    writeln!(stderr).unwrap();
     std::process::exit(1);
 }

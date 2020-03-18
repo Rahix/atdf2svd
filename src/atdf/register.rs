@@ -14,7 +14,7 @@ pub fn parse(
     let description = el
         .attributes
         .get("caption")
-        .and_then(|d| if d.len() != 0 { Some(d) } else { None })
+        .and_then(|d| if !d.is_empty() { Some(d) } else { None })
         .cloned();
 
     let access = if let Some(access) = el.attributes.get("ocd-rw") {
@@ -44,7 +44,7 @@ pub fn parse(
         address: util::parse_int(el.attr("offset")?)? + offset,
         size: util::parse_int(el.attr("size")?)?,
         access,
-        restriction: if fields.len() == 0 {
+        restriction: if fields.is_empty() {
             chip::ValueRestriction::Any
         } else {
             chip::ValueRestriction::Unsafe
