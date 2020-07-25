@@ -35,7 +35,16 @@ pub fn parse_list(
 
                 let group = module.first_child_by_attr(Some("register-group"), "name", name)?;
 
-                for register in group.children.iter() {
+                for register in group
+                    .children
+                    .iter()
+                    .inspect(|e| {
+                        if e.name != "register" {
+                            log::warn!("Unhandled register node: {:?}", e.debug())
+                        }
+                    })
+                    .filter(|e| e.name == "register")
+                {
                     registers.push(atdf::register::parse(register, offset, &value_groups)?);
                 }
             }
