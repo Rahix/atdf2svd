@@ -44,7 +44,7 @@ pub fn parse_list(
 
             peripherals.push(chip::Peripheral {
                 name: instance.attr("name")?.clone(),
-                description: Some(instance.attr("caption")?.clone()),
+                description: instance.attr("caption").ok().cloned(),
                 registers,
             })
         }
