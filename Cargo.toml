@@ -13,8 +13,8 @@ categories = ["command-line-utilities", "embedded"]
 edition = "2018"
 
 [dependencies]
-structopt = "0.3.11"
 xmltree = "0.8.0"
 colored = "1.8.0"
 log = "0.4.6"
 env_logger = "0.7.1"
+gumdrop = "0.8.0"

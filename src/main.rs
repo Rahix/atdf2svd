@@ -8,27 +8,32 @@ pub mod elementext;
 pub mod svd;
 pub mod util;
 
+pub use gumdrop::Options;
 pub use elementext::ElementExt;
 pub use error::{DisplayError, Error, Result};
 
-#[derive(Debug, structopt::StructOpt)]
+#[derive(Debug, Options)]
 /// A tool to convert AVR chip description files (.atdf) to SVD.
-struct Options {
-    #[structopt(parse(from_os_str))]
+struct Atdf2SvdOptions {
+    /// Path to the .atdf file to convert
+    #[options(free, required)]
     atdf_path: std::path::PathBuf,
 
-    #[structopt(parse(from_os_str))]
+    /// [optional] Path where to save the SVD file
+    #[options(free)]
     svd_path: Option<std::path::PathBuf>,
 
-    #[structopt(short = "d", long = "debug")]
+    #[options(short = "d", long = "debug")]
     debug: bool,
 
-    #[structopt(short = "v", long = "verbose")]
+    #[options(short = "v", long = "verbose")]
     verbose: bool,
+
+    help: bool,
 }
 
 fn main() {
-    let args: Options = structopt::StructOpt::from_args();
+    let args = Atdf2SvdOptions::parse_args_default_or_exit();
 
     cli::setup(args.verbose);
 
