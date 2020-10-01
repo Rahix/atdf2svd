@@ -24,6 +24,7 @@ pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
     peripherals.children = c
         .peripherals
         .values()
+        .filter(has_registers)
         .map(svd::peripheral::generate)
         .collect::<Result<Vec<_>, _>>()?;
 
@@ -32,4 +33,12 @@ pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
     el.children.push(peripherals);
 
     Ok(el)
+}
+
+fn has_registers(peripheral: &&chip::Peripheral) -> bool {
+    let regs = !peripheral.registers.is_empty();
+    if !regs {
+        log::warn!("No registers found for peripheral {:?}", peripheral.name);
+    }
+    regs
 }
