@@ -43,6 +43,7 @@ pub fn parse(
         match access.as_ref() {
             "R" => chip::AccessMode::ReadOnly,
             "RW" => chip::AccessMode::ReadWrite,
+            "W" => chip::AccessMode::WriteOnly,
             "" => {
                 log::warn!("empty access-mode on {:?}", bitfield_el);
                 chip::AccessMode::ReadWrite
