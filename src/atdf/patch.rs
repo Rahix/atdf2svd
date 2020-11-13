@@ -40,7 +40,7 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
             .collect();
 
         for reg in port.registers.values_mut() {
-            if !reg.name.ends_with(name) {
+            if !correct_reg_name(&reg.name, name) {
                 log::error!("Register {:?} has a weird name!", reg.name);
             }
 
@@ -50,6 +50,14 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
         }
     }
     Ok(())
+}
+
+fn correct_reg_name(reg_name: &String, port_name: char) -> bool {
+    reg_name.ends_with(port_name)
+        || reg_name.ends_with("CTRL")
+        || reg_name.starts_with("DIR")
+        || reg_name.starts_with("OUT")
+        || reg_name.starts_with("IN")
 }
 
 pub fn remove_unsafe_cpu_regs(chip: &mut chip::Chip, _el: &xmltree::Element) -> crate::Result<()> {
