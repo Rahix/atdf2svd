@@ -44,7 +44,7 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
             .collect();
 
         for reg in port.registers.values_mut() {
-            if correct_reg_name(&reg.name, name) {
+            if reg.name.ends_with(name) || NEW_PORT_REGS.iter().any(|r| r == &reg.name) {
                 reg.fields = fields.clone();
                 // Ensure that direct access to the register is unsafe
                 reg.restriction = chip::ValueRestriction::Unsafe;
