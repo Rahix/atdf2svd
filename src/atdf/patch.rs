@@ -4,6 +4,10 @@ use crate::util;
 use crate::ElementExt;
 use std::collections::BTreeMap;
 
+const NEW_PORT_REGS: [&str; 10] = [
+    "DIR", "DIRSET", "DIRCLR", "DIRTGL", "OUT", "OUTSET", "OUTCLR", "OUTTGL", "IN", "INTFLAGS",
+];
+
 pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) -> crate::Result<()> {
     let port_module = tree
         .first_child("devices")?
@@ -40,24 +44,18 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
             .collect();
 
         for reg in port.registers.values_mut() {
-            if !correct_reg_name(&reg.name, name) {
-                log::error!("Register {:?} has a weird name!", reg.name);
+            if correct_reg_name(&reg.name, name) {
+                reg.fields = fields.clone();
+                // Ensure that direct access to the register is unsafe
+                reg.restriction = chip::ValueRestriction::Unsafe;
             }
-
-            reg.fields = fields.clone();
-            // Ensure that direct access to the register is unsafe
-            reg.restriction = chip::ValueRestriction::Unsafe;
         }
     }
     Ok(())
 }
 
 fn correct_reg_name(reg_name: &str, port_name: char) -> bool {
-    reg_name.ends_with(port_name)
-        || reg_name.ends_with("CTRL")
-        || reg_name.starts_with("DIR")
-        || reg_name.starts_with("OUT")
-        || reg_name.starts_with("IN")
+    reg_name.ends_with(port_name) || NEW_PORT_REGS.iter().any(|r| r == &reg_name)
 }
 
 pub fn remove_unsafe_cpu_regs(chip: &mut chip::Chip, _el: &xmltree::Element) -> crate::Result<()> {
