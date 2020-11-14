@@ -54,10 +54,6 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
     Ok(())
 }
 
-fn correct_reg_name(reg_name: &str, port_name: char) -> bool {
-    reg_name.ends_with(port_name) || NEW_PORT_REGS.iter().any(|r| r == &reg_name)
-}
-
 pub fn remove_unsafe_cpu_regs(chip: &mut chip::Chip, _el: &xmltree::Element) -> crate::Result<()> {
     if let Some(cpu) = chip.peripherals.get_mut("CPU") {
         cpu.registers.remove("SREG");
