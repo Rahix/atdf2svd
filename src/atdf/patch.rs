@@ -52,7 +52,7 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
     Ok(())
 }
 
-fn correct_reg_name(reg_name: &String, port_name: char) -> bool {
+fn correct_reg_name(reg_name: &str, port_name: char) -> bool {
     reg_name.ends_with(port_name)
         || reg_name.ends_with("CTRL")
         || reg_name.starts_with("DIR")
