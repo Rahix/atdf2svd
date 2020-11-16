@@ -18,7 +18,7 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
     for port in chip
         .peripherals
         .values_mut()
-        .filter(|p| p.name.starts_with("PORT"))
+        .filter(|p| p.name.starts_with("PORT") && p.name.len() == 5)
     {
         let name = port.name.chars().rev().next().unwrap();
 
