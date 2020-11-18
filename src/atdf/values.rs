@@ -24,7 +24,11 @@ pub fn parse_value_groups(module_el: &xmltree::Element) -> crate::Result<ValueGr
             value_el.check_name("value")?;
 
             let name = value_el.attr("name")?.clone();
-            let description = value_el.attributes.get("caption").cloned();
+            let description = value_el
+                .attributes
+                .get("caption")
+                .and_then(|d| if !d.is_empty() { Some(d) } else { None })
+                .cloned();
             let value = util::parse_int(value_el.attr("value")?)?;
 
             enumerated_values.insert(
