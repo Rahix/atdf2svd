@@ -4,6 +4,10 @@ use crate::util;
 use crate::ElementExt;
 use std::collections::BTreeMap;
 
+const NEW_PORT_REGS: [&str; 10] = [
+    "DIR", "DIRSET", "DIRCLR", "DIRTGL", "OUT", "OUTSET", "OUTCLR", "OUTTGL", "IN", "INTFLAGS",
+];
+
 pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) -> crate::Result<()> {
     let port_module = tree
         .first_child("devices")?
@@ -14,7 +18,7 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
     for port in chip
         .peripherals
         .values_mut()
-        .filter(|p| p.name.starts_with("PORT"))
+        .filter(|p| p.name.starts_with("PORT") && p.name.len() == 5)
     {
         let name = port.name.chars().rev().next().unwrap();
 
@@ -40,13 +44,11 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
             .collect();
 
         for reg in port.registers.values_mut() {
-            if !reg.name.ends_with(name) {
-                log::error!("Register {:?} has a weird name!", reg.name);
+            if reg.name.ends_with(name) || NEW_PORT_REGS.iter().any(|r| r == &reg.name) {
+                reg.fields = fields.clone();
+                // Ensure that direct access to the register is unsafe
+                reg.restriction = chip::ValueRestriction::Unsafe;
             }
-
-            reg.fields = fields.clone();
-            // Ensure that direct access to the register is unsafe
-            reg.restriction = chip::ValueRestriction::Unsafe;
         }
     }
     Ok(())
