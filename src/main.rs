@@ -1,4 +1,3 @@
-#![feature(btree_drain_filter)]
 #[macro_use]
 pub mod error;
 pub mod cli;
