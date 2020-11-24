@@ -33,6 +33,7 @@ pub fn parse(
             )
         })?;
         let mask_as_int = util::parse_int(mask)?;
+        let mask_as_int = mask_as_int >> mask_as_int.trailing_zeros();
         let filtered_values: std::collections::BTreeMap<_, _> = values
             .iter()
             .filter(|(_, ev)| ev.value & mask_as_int == ev.value)
