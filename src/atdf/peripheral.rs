@@ -53,7 +53,11 @@ pub fn parse_list(
 
             peripherals.push(chip::Peripheral {
                 name: instance.attr("name")?.clone(),
-                description: instance.attr("caption").or(module.attr("caption")).ok().cloned(),
+                description: instance
+                    .attr("caption")
+                    .or(module.attr("caption"))
+                    .ok()
+                    .cloned(),
                 registers,
             })
         }
