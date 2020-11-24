@@ -33,19 +33,17 @@ pub fn parse(
             )
         })?;
         let mask_as_int = util::parse_int(mask)?;
-        let filtered_value: std::collections::BTreeMap<_, _> = values
+        let filtered_values: std::collections::BTreeMap<_, _> = values
             .iter()
-            .filter(|(_, ev)| {
-                if (ev.value & mask_as_int) == ev.value {
-                    true
-                } else {
-                    log::warn!("invalid enumerated value {:?} for mask {}", ev, mask_as_int);
-                    false
-                }
-            })
+            .filter(|(_, ev)| ev.value & mask_as_int == ev.value)
             .map(|(k, v)| (k.clone(), v.clone()))
             .collect();
-        chip::ValueRestriction::Enumerated(filtered_value)
+
+        if values.len() != filtered_values.len() {
+            log::warn!("Invalid enumerated values dropped for field {}", name);
+        }
+
+        chip::ValueRestriction::Enumerated(filtered_values)
     } else if unsafe_range {
         chip::ValueRestriction::Unsafe
     } else {
