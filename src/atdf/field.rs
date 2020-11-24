@@ -42,7 +42,6 @@ pub fn parse(
         if values.len() != filtered_values.len() {
             log::warn!("Invalid enumerated values dropped for field {}", name);
         }
-
         chip::ValueRestriction::Enumerated(filtered_values)
     } else if unsafe_range {
         chip::ValueRestriction::Unsafe
