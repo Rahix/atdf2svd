@@ -57,7 +57,8 @@ pub fn parse_list(
                     .attr("caption")
                     .or(module.attr("caption"))
                     .ok()
-                    .cloned(),
+                    .cloned()
+                    .and_then(|d| if !d.is_empty() { Some(d) } else { None }),
                 registers,
             })
         }
