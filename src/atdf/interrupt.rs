@@ -5,7 +5,12 @@ use crate::ElementExt;
 pub fn parse(interrupt: &xmltree::Element) -> crate::Result<chip::Interrupt> {
     interrupt.check_name("interrupt")?;
 
-    let name = interrupt.attr("name")?.clone();
+    let name = {
+        let inst_name = interrupt.attr("name")?;
+        interrupt
+            .attr("module-instance")
+            .map_or_else(|_| inst_name.clone(), |s| format!("{}_{}", s, inst_name))
+    };
     let index = util::parse_int(interrupt.attr("index")?)?;
     let description = interrupt
         .attributes
