@@ -2,6 +2,8 @@ use crate::atdf;
 use crate::chip;
 use crate::ElementExt;
 
+use std::collections::BTreeMap;
+
 pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {
     let devices = el.first_child("devices")?;
     if devices.children.len() != 1 {
@@ -20,7 +22,7 @@ pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {
     .map(|p| (p.name.clone(), p))
     .collect();
 
-    let interrupts = device
+    let interrupts_vec = device
         .first_child("interrupts")?
         .children
         .iter()
@@ -31,8 +33,35 @@ pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {
         })
         .filter(|e| e.name == "interrupt")
         .map(atdf::interrupt::parse)
-        .map(|r| r.map(|int| (int.name.clone(), int)))
-        .collect::<Result<_, _>>()?;
+        .collect::<Result<Vec<_>, _>>()?;
+
+    // Check for duplicate index, merge names if duplicate index exists
+    let mut interrupts = BTreeMap::<usize, chip::Interrupt>::new();
+    for int in interrupts_vec {
+        if let Some(existing_int) = interrupts.get_mut(&int.index) {
+            let old_name = existing_int.name.clone();
+            if let Some(split_idx) = int.name.find('_') {
+                existing_int.name.push_str(int.name.split_at(split_idx).1);
+            } else {
+                existing_int.name.push('_');
+                existing_int.name.push_str(&int.name);
+            }
+            log::warn!(
+                "Merging interrupt {} and {} to {}",
+                old_name,
+                int.name,
+                existing_int.name
+            );
+        } else {
+            interrupts.insert(int.index, int);
+        }
+    }
+
+    // Map interrupts from <usize, chip::Interrupt> to <std::string::String, chip::Interrupt>
+    let interrupts = interrupts
+        .iter()
+        .map(|(_, int)| (int.name.clone(), int.clone()))
+        .collect();
 
     Ok(chip::Chip {
         name: device.attr("name")?.clone(),
