@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Fall back to module caption if instance caption is missing ([#15]).
 - Improved naming of interrupts for newer AVR MCUs ([#19]).
+- When multiple interrupts with the same vector exist, their names are merged
+  into a single interrupt definition ([#20]).
 
 ### Fixed
 - Properly handle empty `caption` attribute for enumerated values ([#12]).
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#14]: https://github.com/Rahix/atdf2svd/pull/14
 [#15]: https://github.com/Rahix/atdf2svd/pull/15
 [#19]: https://github.com/Rahix/atdf2svd/pull/19
+[#20]: https://github.com/Rahix/atdf2svd/pull/20
 [`3f0003c75350`]: https://github.com/Rahix/atdf2svd/commit/3f0003c753506618d8da1bd9e2995e9d88b0d878
 
 
