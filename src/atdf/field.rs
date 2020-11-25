@@ -32,7 +32,18 @@ pub fn parse(
                 bitfield_el,
             )
         })?;
-        chip::ValueRestriction::Enumerated(values.clone())
+        let mask_as_int = util::parse_int(mask)?;
+        let mask_as_int = mask_as_int >> mask_as_int.trailing_zeros();
+        let filtered_values: std::collections::BTreeMap<_, _> = values
+            .iter()
+            .filter(|(_, ev)| ev.value & mask_as_int == ev.value)
+            .map(|(k, v)| (k.clone(), v.clone()))
+            .collect();
+
+        if values.len() != filtered_values.len() {
+            log::warn!("Invalid enumerated values dropped for field {}", name);
+        }
+        chip::ValueRestriction::Enumerated(filtered_values)
     } else if unsafe_range {
         chip::ValueRestriction::Unsafe
     } else {
