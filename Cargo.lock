@@ -11,7 +11,7 @@ dependencies = [
 
 [[package]]
 name = "atdf2svd"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "colored",
  "env_logger",
