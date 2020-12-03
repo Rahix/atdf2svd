@@ -18,7 +18,7 @@ pub fn parse_mask(s: &str) -> crate::Result<Option<((usize, usize), bool)>> {
         return Ok(None);
     }
 
-    let bits_set = (0..mem::size_of::<usize>()).filter(|i| (mask & (1 << *i)) > 0);
+    let bits_set = (0..mem::size_of::<usize>()*8).filter(|i| (mask & (1 << *i)) > 0);
     let range = (bits_set.clone().min().unwrap(), bits_set.max().unwrap());
 
     let range_bitmask = ((1 << (range.1 - range.0 + 1)) - 1) << range.0;
