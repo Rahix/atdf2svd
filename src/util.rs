@@ -2,8 +2,8 @@ use std::mem;
 
 /// Parse an integer from either decimal or hexadecimal
 pub fn parse_int(s: &str) -> crate::Result<usize> {
-    if s.starts_with("0x") {
-        usize::from_str_radix(&s[2..], 16)
+    if let Some(hex) = s.strip_prefix("0x") {
+        usize::from_str_radix(hex, 16)
     } else {
         usize::from_str_radix(s, 10)
     }
@@ -18,7 +18,7 @@ pub fn parse_mask(s: &str) -> crate::Result<Option<((usize, usize), bool)>> {
         return Ok(None);
     }
 
-    let bits_set = (0..mem::size_of::<usize>()*8).filter(|i| (mask & (1 << *i)) > 0);
+    let bits_set = (0..mem::size_of::<usize>() * 8).filter(|i| (mask & (1 << *i)) > 0);
     let range = (bits_set.clone().min().unwrap(), bits_set.max().unwrap());
 
     let range_bitmask = ((1 << (range.1 - range.0 + 1)) - 1) << range.0;
