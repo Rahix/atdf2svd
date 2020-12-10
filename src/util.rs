@@ -26,3 +26,17 @@ pub fn parse_mask(s: &str) -> crate::Result<Option<((usize, usize), bool)>> {
 
     Ok(Some((range, has_intermediate)))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_integer() {
+        assert_eq!(parse_int("0xff").ok(), Some(255));
+        assert_eq!(parse_int("23").ok(), Some(23));
+        assert!(parse_int("").is_err());
+        assert!(parse_int("ff").is_err());
+        assert!(parse_int("-7").is_err());
+    }
+}
