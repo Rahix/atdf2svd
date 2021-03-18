@@ -23,7 +23,7 @@ pub fn parse(
             "R" => chip::AccessMode::ReadOnly,
             "W" => chip::AccessMode::WriteOnly,
             "RW" => chip::AccessMode::ReadWrite,
-            _ => chip::AccessMode::ReadWrite
+            _ => chip::AccessMode::ReadWrite,
         }
     } else {
         chip::AccessMode::ReadWrite
