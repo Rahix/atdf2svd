@@ -39,7 +39,16 @@ fn main() {
     let args = Atdf2SvdOptions::parse_args_default_or_exit();
 
     if args.version {
-        println!("atdf2svd v{}", env!("CARGO_PKG_VERSION"));
+        println!(
+            "{} {}",
+            env!("CARGO_PKG_NAME"),
+            git_version::git_version!(
+                args = ["--always", "--dirty", "--abbrev=12"],
+                cargo_prefix = "v",
+                cargo_suffix = " (no git)",
+                fallback = "unknown"
+            ),
+        );
         return;
     }
 
