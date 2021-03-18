@@ -6,10 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
-- Fix bitmask calculation not being correct for register sizes greater than
+- Fixed bitmask calculation not being correct for register sizes greater than
   1 byte ([#21]).
+- Fixed use of the wrong attribute for access mode. `rw` should be used instead
+  of `ocd-rw` ([#24]).
 
 [#21]: https://github.com/Rahix/atdf2svd/pull/21
+[#24]: https://github.com/Rahix/atdf2svd/pull/24
 
 
 ## [0.2.0] - 2020-11-25
