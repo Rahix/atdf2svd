@@ -17,14 +17,13 @@ pub fn parse(
         .and_then(|d| if !d.is_empty() { Some(d) } else { None })
         .cloned();
 
-    let access = if let Some(access) = el.attributes.get("ocd-rw") {
+    let access = if let Some(access) = el.attributes.get("rw") {
         match access.as_ref() {
+            "" => chip::AccessMode::NoAccess,
             "R" => chip::AccessMode::ReadOnly,
-            "" => {
-                log::warn!("empty access-mode on {}", el.debug());
-                chip::AccessMode::ReadWrite
-            }
-            _ => panic!("unknown access mode {:?}", access),
+            "W" => chip::AccessMode::WriteOnly,
+            "RW" => chip::AccessMode::ReadWrite,
+            _ => chip::AccessMode::ReadWrite
         }
     } else {
         chip::AccessMode::ReadWrite

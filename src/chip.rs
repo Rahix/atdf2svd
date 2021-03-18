@@ -34,6 +34,7 @@ pub struct Interrupt {
 
 #[derive(Debug, Clone, Copy)]
 pub enum AccessMode {
+    NoAccess,
     ReadOnly,
     WriteOnly,
     ReadWrite,
