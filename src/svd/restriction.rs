@@ -72,7 +72,8 @@ pub fn generate_access(a: chip::AccessMode) -> crate::Result<Option<xmltree::Ele
     Ok(match a {
         chip::AccessMode::ReadOnly => Some("read-only"),
         chip::AccessMode::WriteOnly => Some("write-only"),
-        chip::AccessMode::ReadWrite => None,
+        chip::AccessMode::ReadWrite => Some("read-write"),
+        chip::AccessMode::NoAccess => None
     }
     .map(|m| xmltree::Element::new_with_text("access", m)))
 }
