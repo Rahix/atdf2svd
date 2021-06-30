@@ -14,22 +14,33 @@ pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
         ("resetValue", "0"),
         ("resetMask", "0xff"),
     ];
-
     for (name, value) in defaults.iter() {
         el.child_with_text(name, *value);
     }
 
-    let mut peripherals = xmltree::Element::new("peripherals");
+    let cpu_tags = [
+        ("name", "other"),
+        ("revision", "r0p0"),
+        ("endian", "little"),
+        ("mpuPresent", "false"),
+        ("fpuPresent", "false"),
+        ("nvicPrioBits", "4"),
+        ("vendorSystickConfig", "false"),
+    ];
+    let mut cpu = xmltree::Element::new("cpu");
+    for (name, value) in cpu_tags.iter() {
+        cpu.child_with_text(name, *value);
+    }
+    el.children.push(cpu);
 
+    let mut peripherals = xmltree::Element::new("peripherals");
     peripherals.children = c
         .peripherals
         .values()
         .filter(has_registers)
         .map(svd::peripheral::generate)
         .collect::<Result<Vec<_>, _>>()?;
-
     svd::interrupt::generate(&mut peripherals, c)?;
-
     el.children.push(peripherals);
 
     Ok(el)
