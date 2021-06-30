@@ -5,6 +5,10 @@ use crate::ElementExt;
 pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
     let mut el = xmltree::Element::new("device");
 
+    el.attributes.insert("schemaVersion".to_string(), "1.1".to_string());
+    el.attributes.insert("xmlns:xs".to_string(), "http://www.w3.org/2001/XMLSchema-instance".to_string());
+    el.attributes.insert("xs:noNamespaceSchemaLocation".to_string(), "CMSIS-SVD.xsd".to_string());
+
     let defaults = [
         ("vendor", "Atmel"),
         ("name", c.name.as_ref()),
