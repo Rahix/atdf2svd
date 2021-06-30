@@ -26,7 +26,7 @@ pub fn generate(peripherals: &mut xmltree::Element, c: &chip::Chip) -> crate::Re
                         desc.as_ref()
                     } else {
                         log::warn!("Description missing for field {:?}", interrupt.name);
-                        "<TBD>"
+                        "No Description."
                     },
                 );
 
