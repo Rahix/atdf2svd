@@ -1,4 +1,4 @@
-atdf2svd [![crates.io page](http://meritbadge.herokuapp.com/atdf2svd)](https://crates.io/crates/atdf2svd)
+atdf2svd [![crates.io page](https://img.shields.io/crates/v/atdf2svd.svg)](https://crates.io/crates/atdf2svd)
 ========
 A converter tool that converts Atmel's *atdf* files into *svd*.  The primary usecase for this is to then use the *svd* files with `svd2rust` to create safe abstractions for register access.
 
