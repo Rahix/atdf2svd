@@ -12,6 +12,7 @@ pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
     let defaults = [
         ("vendor", "Atmel"),
         ("name", c.name.as_ref()),
+        ("description", c.description.as_deref().unwrap_or("No description available.")),
         ("addressUnitBits", "8"),
         ("size", "8"),
         ("access", "read-write"),
