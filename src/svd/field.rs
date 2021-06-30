@@ -12,7 +12,7 @@ pub fn generate(f: &chip::Field) -> crate::Result<xmltree::Element> {
             desc.as_ref()
         } else {
             log::warn!("Description missing for field {:?}", f.name);
-            "<TBD>"
+            "No Description."
         },
     );
     el.child_with_text("bitRange", format!("[{}:{}]", f.range.1, f.range.0));

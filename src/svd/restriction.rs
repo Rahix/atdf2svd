@@ -60,7 +60,7 @@ pub fn generate_enumerated(e: &chip::EnumeratedValue) -> crate::Result<xmltree::
             desc.as_ref()
         } else {
             log::warn!("Description missing for enumeratedValue {:?}", e.name);
-            "<TBD>"
+            "No Description."
         },
     );
     el.child_with_text("value", e.value.to_string());

@@ -44,7 +44,7 @@ pub fn generate(p: &chip::Peripheral) -> crate::Result<xmltree::Element> {
             desc.as_ref()
         } else {
             log::warn!("Description missing for peripheral {:?}", p.name);
-            "<TBD>"
+            "No Description."
         },
     );
     el.child_with_text("baseAddress", format!("0x{:X}", base));
