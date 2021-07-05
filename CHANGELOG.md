@@ -8,8 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Added missing `<addressBlock>` elements to be more in line with the SVD spec
   ([#26]).
+- Fixed a few SVDConv errors and warnings ([#28]).
 
 [#26]: https://github.com/Rahix/atdf2svd/pull/26
+[#28]: https://github.com/Rahix/atdf2svd/pull/28
+
 
 
 ## [0.3.0] - 2021-03-18
