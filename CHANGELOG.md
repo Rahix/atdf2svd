@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+
+## [0.3.1] - 2021-08-01
 ### Fixed
 - Added missing `<addressBlock>` elements to be more in line with the SVD spec
   ([#26]).
@@ -73,7 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow `signals_to_port_fields` patch to fail.
 
 
-[Unreleased]: https://github.com/Rahix/atdf2svd/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/Rahix/atdf2svd/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/Rahix/atdf2svd/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/Rahix/atdf2svd/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Rahix/atdf2svd/compare/v0.1.4...v0.2.0
 [0.1.4]: https://github.com/Rahix/atdf2svd/compare/v0.1.3...v0.1.4
