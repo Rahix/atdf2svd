@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Errors during interrupt generation have been converted to warnings.  This
+  means you can generate an SVD even without interrupts ([#31]).
+- Updated dependencies.
+
+[#31]: https://github.com/Rahix/atdf2svd/pull/31
 
 
 ## [0.3.1] - 2021-08-01
