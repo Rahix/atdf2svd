@@ -45,7 +45,9 @@ pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
         .filter(has_registers)
         .map(svd::peripheral::generate)
         .collect::<Result<Vec<_>, _>>()?;
-    svd::interrupt::generate(&mut peripherals, c)?;
+    if svd::interrupt::generate(&mut peripherals, c).is_err() {
+        log::warn!("Could not generate CPU interrupts")
+    }
     el.children.push(peripherals);
 
     Ok(el)
