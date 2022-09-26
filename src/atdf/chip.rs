@@ -65,9 +65,14 @@ pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {
 
     Ok(chip::Chip {
         name: device.attr("name")?.clone(),
+        architecture: device.attr("architecture")?.clone(),
+        family: device.attr("family")?.clone(),
+        series: device.attr("series").ok().cloned(),
+
         description: None,
         vendor: None,
         version: None,
+
         peripherals,
         interrupts,
     })
