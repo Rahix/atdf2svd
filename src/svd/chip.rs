@@ -23,20 +23,7 @@ pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
         el.child_with_text(name, *value);
     }
 
-    let cpu_tags = [
-        ("name", "other"),
-        ("revision", "r0p0"),
-        ("endian", "little"),
-        ("mpuPresent", "false"),
-        ("fpuPresent", "false"),
-        ("nvicPrioBits", "4"),
-        ("vendorSystickConfig", "false"),
-    ];
-    let mut cpu = xmltree::Element::new("cpu");
-    for (name, value) in cpu_tags.iter() {
-        cpu.child_with_text(name, *value);
-    }
-    el.children.push(cpu);
+    el.children.push(generate_cpu(c)?);
 
     let mut peripherals = xmltree::Element::new("peripherals");
     peripherals.children = c
@@ -59,4 +46,47 @@ fn has_registers(peripheral: &&chip::Peripheral) -> bool {
         log::warn!("No registers found for peripheral {:?}", peripheral.name);
     }
     regs
+}
+
+fn generate_cpu(c: &chip::Chip) -> crate::Result<xmltree::Element> {
+    let mut cpu = xmltree::Element::new("cpu");
+
+    let cpu_name = architecture_to_name(&c.architecture);
+    let is_cortexm = cpu_name.starts_with("CM");
+
+    let (nvic_prio_bits, vendor_systick_config) = match is_cortexm {
+        true => ("4", "false"),
+        // Non Cortex-M CPUs don't implement a NVIC nor a SysTick timer.
+        false => ("0", "false"),
+    };
+
+    let defaults = [
+        ("name", cpu_name.as_ref()),
+        ("revision", "r0p0"),
+        ("endian", "little"),
+        ("mpuPresent", "false"),
+        ("fpuPresent", "false"),
+        ("nvicPrioBits", nvic_prio_bits),
+        ("vendorSystickConfig", vendor_systick_config),
+    ];
+    for (name, value) in defaults.iter() {
+        cpu.child_with_text(name, *value);
+    }
+
+    Ok(cpu)
+}
+
+fn architecture_to_name(architecture: &str) -> String {
+    // Convert CORTEX-.* to C.* format. For example:
+    //
+    // - CORTEX-A5 -> CA5
+    // - CORTEX-M0PLUS -> CM0PLUS
+    let cortex_name = architecture.strip_prefix("CORTEX-").map(|suffix| {
+        let mut name = String::with_capacity("C".len() + suffix.len());
+        name.push_str("C");
+        name.push_str(suffix);
+        name
+    });
+
+    cortex_name.unwrap_or("other".to_string())
 }
