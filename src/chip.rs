@@ -3,6 +3,10 @@ use std::collections::BTreeMap;
 #[derive(Debug, Clone)]
 pub struct Chip {
     pub name: String,
+    pub architecture: String,
+    pub family: String,
+    pub series: Option<String>,
+
     pub description: Option<String>,
     pub vendor: Option<String>,
     pub version: Option<String>,
