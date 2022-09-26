@@ -22,6 +22,9 @@ pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
     for (name, value) in defaults.iter() {
         el.child_with_text(name, *value);
     }
+    if let Some(ref s) = c.series {
+        el.child_with_text("series", s);
+    }
 
     el.children.push(generate_cpu(c)?);
 
@@ -81,12 +84,9 @@ fn architecture_to_name(architecture: &str) -> String {
     //
     // - CORTEX-A5 -> CA5
     // - CORTEX-M0PLUS -> CM0PLUS
-    let cortex_name = architecture.strip_prefix("CORTEX-").map(|suffix| {
-        let mut name = String::with_capacity("C".len() + suffix.len());
-        name.push_str("C");
-        name.push_str(suffix);
-        name
-    });
+    let cortex_name = architecture
+        .strip_prefix("CORTEX-")
+        .map(|suffix| format!("C{suffix}"));
 
     cortex_name.unwrap_or("other".to_string())
 }
