@@ -1,79 +1,79 @@
 use crate::chip;
-use crate::ElementExt;
+use std::convert::TryInto;
 
 pub fn generate(
     restriction: &chip::ValueRestriction,
-    width: usize,
-    name: &str,
-) -> crate::Result<Vec<xmltree::Element>> {
-    Ok(match restriction {
-        chip::ValueRestriction::Unsafe => vec![],
-        chip::ValueRestriction::Any => {
-            if width == 1 {
-                vec![]
+    width: u32,
+) -> crate::Result<(
+    Option<svd_rs::WriteConstraint>,
+    Vec<svd_rs::EnumeratedValues>,
+)> {
+    let restrictions = match restriction {
+        // No write constraint, the constraint is specified by the size of the
+        // field in bits.
+        //
+        // A software that generates register access from this should generate
+        // a correct bit mask.
+        chip::ValueRestriction::Any => (
+            if width > 1 {
+                Some(svd_rs::WriteConstraint::Range(
+                    svd_rs::WriteConstraintRange {
+                        min: 0,
+                        max: 2u64.pow(width) - 1,
+                    },
+                ))
             } else {
-                let mut el = xmltree::Element::new("writeConstraint");
-                let mut range = xmltree::Element::new("range");
-                range.child_with_text("minimum", 0.to_string());
-                range.child_with_text("maximum", (2usize.pow(width as u32) - 1).to_string());
-                el.children.push(range);
-                vec![el]
-            }
-        }
-        chip::ValueRestriction::Range(lo, hi) => {
-            let mut el = xmltree::Element::new("writeConstraint");
-            let mut range = xmltree::Element::new("range");
-            range.child_with_text("minimum", lo.to_string());
-            range.child_with_text("maximum", hi.to_string());
-            el.children.push(range);
-            vec![el]
-        }
-        chip::ValueRestriction::Enumerated(enumerated) => {
-            let mut wc = xmltree::Element::new("writeConstraint");
-            wc.child_with_text("useEnumeratedValues", "true");
+                None
+            },
+            vec![],
+        ),
+        chip::ValueRestriction::Range(ref lo, ref hi) => (
+            Some(svd_rs::WriteConstraint::Range(
+                svd_rs::WriteConstraintRange { min: *lo, max: *hi },
+            )),
+            vec![],
+        ),
+        chip::ValueRestriction::Enumerated(ref v) => {
+            let mut values = v.values().collect::<Vec<_>>();
+            values.sort_by(|a, b| a.value.cmp(&b.value));
 
-            let mut values_el = xmltree::Element::new("enumeratedValues");
-
-            let mut values: Vec<_> = enumerated.values().collect();
-            values.sort_by(|v1, v2| v1.value.cmp(&v2.value));
-            values_el.children = values
+            let values = values
                 .into_iter()
-                .inspect(|v| {
-                    if v.name.starts_with("VAL_0x") {
-                        log::info!("Undescriptive name {:?} in {:?}", v.name, name);
-                    }
-                })
                 .map(generate_enumerated)
-                .collect::<Result<_, _>>()?;
+                .collect::<Result<Vec<_>, _>>()?;
 
-            vec![wc, values_el]
+            let enumerated_values = svd_rs::EnumeratedValues::builder()
+                .values(values)
+                .build(svd_rs::ValidateLevel::Strict)?;
+
+            (
+                Some(svd_rs::WriteConstraint::UseEnumeratedValues(true)),
+                vec![enumerated_values],
+            )
         }
-    })
+        _ => (None, vec![]),
+    };
+
+    Ok(restrictions)
 }
 
-pub fn generate_enumerated(e: &chip::EnumeratedValue) -> crate::Result<xmltree::Element> {
-    let mut el = xmltree::Element::new("enumeratedValue");
-    el.child_with_text("name", e.name.clone());
-    el.child_with_text(
-        "description",
-        if let Some(ref desc) = e.description {
-            desc.as_ref()
-        } else {
+pub fn generate_enumerated(e: &chip::EnumeratedValue) -> crate::Result<svd_rs::EnumeratedValue> {
+    svd_rs::EnumeratedValue::builder()
+        .name(e.name.clone())
+        .description(e.description.clone().or_else(|| {
             log::warn!("Description missing for enumeratedValue {:?}", e.name);
-            "No Description."
-        },
-    );
-    el.child_with_text("value", e.value.to_string());
-
-    Ok(el)
+            None
+        }))
+        .value(Some(e.value.try_into()?))
+        .build(svd_rs::ValidateLevel::Strict)
+        .map_err(crate::Error::from)
 }
 
-pub fn generate_access(a: chip::AccessMode) -> crate::Result<Option<xmltree::Element>> {
-    Ok(match a {
-        chip::AccessMode::ReadOnly => Some("read-only"),
-        chip::AccessMode::WriteOnly => Some("write-only"),
-        chip::AccessMode::ReadWrite => Some("read-write"),
+pub fn generate_access(a: chip::AccessMode) -> Option<svd_rs::Access> {
+    match a {
+        chip::AccessMode::ReadOnly => Some(svd_rs::Access::ReadOnly),
+        chip::AccessMode::WriteOnly => Some(svd_rs::Access::WriteOnly),
+        chip::AccessMode::ReadWrite => Some(svd_rs::Access::ReadWrite),
         chip::AccessMode::NoAccess => None,
     }
-    .map(|m| xmltree::Element::new_with_text("access", m)))
 }

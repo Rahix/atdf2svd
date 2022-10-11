@@ -23,12 +23,6 @@ pub trait ElementExt {
 
     /// Check the name to be the expected value or error
     fn check_name(&self, name: &str) -> crate::Result<()>;
-
-    /// Create a new element with text content
-    fn new_with_text<S: Into<String>>(name: &str, text: S) -> Self;
-
-    /// Create a new child element with text content
-    fn child_with_text<S: Into<String>>(&mut self, name: &str, text: S);
 }
 
 impl ElementExt for xmltree::Element {
@@ -92,17 +86,6 @@ impl ElementExt for xmltree::Element {
         } else {
             Err(error::WrongName::new(name, self).into())
         }
-    }
-
-    fn new_with_text<S: Into<String>>(name: &str, text: S) -> Self {
-        let mut el = Self::new(name);
-        el.text = Some(text.into());
-        el
-    }
-
-    fn child_with_text<S: Into<String>>(&mut self, name: &str, text: S) {
-        let child = Self::new_with_text(name, text);
-        self.children.push(child);
     }
 }
 

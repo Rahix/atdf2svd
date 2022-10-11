@@ -1,20 +1,26 @@
 use crate::chip;
 use crate::svd;
-use crate::ElementExt;
+use std::convert::TryInto;
 
-fn create_address_blocks(p: &chip::Peripheral, el: &mut xmltree::Element) -> crate::Result<()> {
+fn create_address_blocks(p: &chip::Peripheral) -> crate::Result<Option<Vec<svd_rs::AddressBlock>>> {
     let mut registers: Vec<_> = p.registers.values().collect();
     registers.sort_by(|a, b| a.address.cmp(&b.address));
-    let base = p.base_address().expect("no base address");
 
-    let mut add_address_block = |offset, size| {
-        let mut address_block = xmltree::Element::new("addressBlock");
-        address_block.child_with_text("offset", format!("0x{:X}", offset - base));
-        address_block.child_with_text("size", format!("0x{:X}", size));
-        address_block.child_with_text("usage", "registers");
-        el.children.push(address_block);
+    let base = p.base_address().expect("no base address");
+    let new_address_block = |offset, size| {
+        let offset = (offset as usize - base)
+            .try_into()
+            .map_err(crate::Error::from)?;
+
+        svd_rs::AddressBlock::builder()
+            .offset(offset)
+            .size(size)
+            .usage(svd_rs::AddressBlockUsage::Registers)
+            .build(svd_rs::ValidateLevel::Strict)
+            .map_err(crate::Error::from)
     };
 
+    let mut address_blocks = Vec::new();
     let mut current_offset = registers[0].address;
     let mut current_size = 0;
     for reg in registers.into_iter() {
@@ -22,44 +28,45 @@ fn create_address_blocks(p: &chip::Peripheral, el: &mut xmltree::Element) -> cra
         if current_address == reg.address {
             current_size += reg.size;
         } else {
-            add_address_block(current_offset, current_size);
+            address_blocks.push(new_address_block(current_offset, current_size.try_into()?)?);
 
             current_offset = reg.address;
             current_size = reg.size;
         }
     }
-    add_address_block(current_offset, current_size);
+    address_blocks.push(new_address_block(current_offset, current_size.try_into()?)?);
 
-    Ok(())
+    let address_blocks = if !address_blocks.is_empty() {
+        Some(address_blocks)
+    } else {
+        None
+    };
+
+    Ok(address_blocks)
 }
 
-pub fn generate(p: &chip::Peripheral) -> crate::Result<xmltree::Element> {
-    let mut el = xmltree::Element::new("peripheral");
-    let base = p.base_address().expect("todo error");
+pub fn generate(p: &chip::Peripheral) -> crate::Result<svd_rs::Peripheral> {
+    let base: u32 = p
+        .base_address()
+        .expect("Could not retrieve peripheral base address")
+        .try_into()?;
 
-    el.child_with_text("name", p.name.clone());
-    el.child_with_text(
-        "description",
-        if let Some(ref desc) = p.description {
-            desc.as_ref()
-        } else {
-            log::warn!("Description missing for peripheral {:?}", p.name);
-            "No Description."
-        },
-    );
-    el.child_with_text("baseAddress", format!("0x{:X}", base));
-
-    create_address_blocks(p, &mut el)?;
-
-    let mut registers = xmltree::Element::new("registers");
-
-    registers.children = p
+    let registers = p
         .registers
         .values()
-        .map(|r| svd::register::generate(r, base))
+        .map(|r| svd::register::generate(r, base).map(svd_rs::RegisterCluster::Register))
         .collect::<Result<Vec<_>, _>>()?;
 
-    el.children.push(registers);
-
-    Ok(el)
+    svd_rs::PeripheralInfo::builder()
+        .name(p.name.clone())
+        .description(p.description.clone().or_else(|| {
+            log::warn!("Description missing for peripheral {:?}", p.name);
+            None
+        }))
+        .base_address(u64::from(base))
+        .address_block(create_address_blocks(p)?)
+        .registers(Some(registers))
+        .build(svd_rs::ValidateLevel::Strict)
+        .map(svd_rs::Peripheral::Single)
+        .map_err(crate::Error::from)
 }

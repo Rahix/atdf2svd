@@ -1,40 +1,27 @@
 use crate::chip;
-use crate::elementext::ElementExt;
 use crate::DisplayError;
+use std::convert::TryInto;
 
-pub fn generate(peripherals: &mut xmltree::Element, c: &chip::Chip) -> crate::Result<()> {
+pub fn generate(peripherals: &mut [svd_rs::Peripheral], c: &chip::Chip) -> crate::Result<()> {
     // Find the (first) peripheral with the name `CPU` to then add the interrupts to it.
-    for peripheral in peripherals.children.iter_mut() {
-        let name = peripheral.get_child("name".to_string()).and_then(|e| {
-            // Once `inner_deref` is stabilized, this can be changed to
-            // e.text.deref() or e.text.as_deref(), depending on the final name
-            e.text.as_ref().map(|s| s.as_ref())
-        });
-
-        if let Some("CPU") = name {
+    for peripheral in peripherals.iter_mut() {
+        if peripheral.name == "CPU" {
             let mut interrupts = c.interrupts.values().collect::<Vec<_>>();
             interrupts.sort_by(|a, b| a.index.cmp(&b.index));
-            let el_interrupts = interrupts.into_iter().map(|interrupt| {
-                let mut int = xmltree::Element::new("interrupt");
 
-                int.child_with_text("name", interrupt.name.clone());
-                int.child_with_text("value", interrupt.index.to_string());
+            let interrupts = interrupts
+                .into_iter()
+                .map(|interrupt| {
+                    svd_rs::Interrupt::builder()
+                        .name(interrupt.name.clone())
+                        .description(interrupt.description.clone())
+                        .value(interrupt.index.try_into().map_err(crate::Error::from)?)
+                        .build(svd_rs::ValidateLevel::Strict)
+                        .map_err(crate::Error::from)
+                })
+                .collect::<Result<Vec<_>, _>>()?;
 
-                int.child_with_text(
-                    "description",
-                    if let Some(ref desc) = interrupt.description {
-                        desc.as_ref()
-                    } else {
-                        log::warn!("Description missing for field {:?}", interrupt.name);
-                        "No Description."
-                    },
-                );
-
-                int
-            });
-
-            peripheral.children.extend(el_interrupts);
-
+            peripheral.interrupt.extend(interrupts);
             return Ok(());
         }
     }
