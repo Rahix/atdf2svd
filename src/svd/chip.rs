@@ -1,82 +1,70 @@
 use crate::chip;
-use crate::svd;
-use crate::ElementExt;
 
-pub fn generate(c: &chip::Chip) -> crate::Result<xmltree::Element> {
-    let mut el = xmltree::Element::new("device");
+pub fn generate(c: &chip::Chip) -> crate::Result<svd_rs::Device> {
+    let device = svd_rs::Device::builder()
+        .xmlns_xs("http://www.w3.org/2001/XMLSchema-instance".to_string())
+        .schema_version("1.1".to_string())
+        .no_namespace_schema_location("CMSIS-SVD.xsd".to_string());
 
-    el.attributes.insert("schemaVersion".to_string(), "1.1".to_string());
-    el.attributes.insert("xmlns:xs".to_string(), "http://www.w3.org/2001/XMLSchema-instance".to_string());
-    el.attributes.insert("xs:noNamespaceSchemaLocation".to_string(), "CMSIS-SVD.xsd".to_string());
+    let device = device
+        .vendor(Some("Atmel".to_owned()))
+        .name(c.name.clone())
+        .version("1.0".to_string())
+        .description(
+            c.description
+                .clone()
+                .unwrap_or_else(|| "No description available.".to_string()),
+        )
+        .address_unit_bits(8)
+        .width(8)
+        .default_register_properties(
+            svd_rs::RegisterProperties::new()
+                .size(Some(8))
+                .access(Some(svd_rs::Access::ReadWrite))
+                .reset_value(Some(0))
+                .reset_mask(Some(0xff)),
+        );
 
-    let defaults = [
-        ("vendor", "Atmel"),
-        ("name", c.name.as_ref()),
-        ("description", c.description.as_deref().unwrap_or("No description available.")),
-        ("addressUnitBits", "8"),
-        ("size", "8"),
-        ("access", "read-write"),
-        ("resetValue", "0"),
-        ("resetMask", "0xff"),
-    ];
-    for (name, value) in defaults.iter() {
-        el.child_with_text(name, *value);
-    }
-    if let Some(ref s) = c.series {
-        el.child_with_text("series", s);
-    }
+    let device = device.cpu(Some(generate_cpu(c)?));
 
-    el.children.push(generate_cpu(c)?);
-
-    let mut peripherals = xmltree::Element::new("peripherals");
-    peripherals.children = c
+    let mut peripherals = c
         .peripherals
         .values()
         .filter(has_registers)
-        .map(svd::peripheral::generate)
+        .map(crate::svd::peripheral::generate)
         .collect::<Result<Vec<_>, _>>()?;
-    if svd::interrupt::generate(&mut peripherals, c).is_err() {
-        log::warn!("Could not generate CPU interrupts")
-    }
-    el.children.push(peripherals);
 
-    Ok(el)
+    if crate::svd::interrupt::generate(&mut peripherals, c).is_err() {
+        log::warn!("Could not generate CPU interrupts");
+    }
+
+    device
+        .peripherals(peripherals)
+        .build(svd_rs::ValidateLevel::Strict)
+        .map_err(crate::Error::from)
 }
 
 fn has_registers(peripheral: &&chip::Peripheral) -> bool {
     let regs = !peripheral.registers.is_empty();
     if !regs {
-        log::warn!("No registers found for peripheral {:?}", peripheral.name);
+        log::warn!("No registers found for peripheral {}", peripheral.name);
     }
     regs
 }
 
-fn generate_cpu(c: &chip::Chip) -> crate::Result<xmltree::Element> {
-    let mut cpu = xmltree::Element::new("cpu");
-
+fn generate_cpu(c: &chip::Chip) -> crate::Result<svd_rs::Cpu> {
     let cpu_name = architecture_to_name(&c.architecture);
-    let is_cortexm = cpu_name.starts_with("CM");
 
-    let (nvic_prio_bits, vendor_systick_config) = match is_cortexm {
-        true => ("4", "false"),
-        // Non Cortex-M CPUs don't implement a NVIC nor a SysTick timer.
-        false => ("0", "false"),
-    };
-
-    let defaults = [
-        ("name", cpu_name.as_ref()),
-        ("revision", "r0p0"),
-        ("endian", "little"),
-        ("mpuPresent", "false"),
-        ("fpuPresent", "false"),
-        ("nvicPrioBits", nvic_prio_bits),
-        ("vendorSystickConfig", vendor_systick_config),
-    ];
-    for (name, value) in defaults.iter() {
-        cpu.child_with_text(name, *value);
-    }
-
-    Ok(cpu)
+    svd_rs::Cpu::builder()
+        .name(cpu_name)
+        .revision("r0p0".to_string())
+        .endian(svd_rs::Endian::Little)
+        .mpu_present(false)
+        .fpu_present(false)
+        .nvic_priority_bits(4)
+        .has_vendor_systick(false)
+        .build(svd_rs::ValidateLevel::Strict)
+        .map_err(crate::Error::from)
 }
 
 fn architecture_to_name(architecture: &str) -> String {

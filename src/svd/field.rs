@@ -1,31 +1,28 @@
 use crate::chip;
 use crate::svd;
-use crate::ElementExt;
+use std::convert::TryInto;
 
-pub fn generate(f: &chip::Field) -> crate::Result<xmltree::Element> {
-    let mut el = xmltree::Element::new("field");
+pub fn generate(f: &chip::Field) -> crate::Result<svd_rs::Field> {
+    let (write_constraint, enumerated_values) =
+        svd::restriction::generate(&f.restriction, f.width().try_into()?)?;
+    let (lsb, msb) = (f.range.0 as u32, f.range.1 as u32);
 
-    el.child_with_text("name", f.name.clone());
-    el.child_with_text(
-        "description",
-        if let Some(ref desc) = f.description {
-            desc.as_ref()
-        } else {
+    let field = svd_rs::FieldInfo::builder()
+        .name(f.name.clone())
+        .description(f.description.clone().or_else(|| {
             log::warn!("Description missing for field {:?}", f.name);
-            "No Description."
-        },
-    );
-    el.child_with_text("bitRange", format!("[{}:{}]", f.range.1, f.range.0));
+            Some("No description.".to_owned())
+        }))
+        .bit_range(svd_rs::BitRange {
+            offset: lsb,
+            width: msb - lsb + 1,
+            range_type: svd_rs::BitRangeType::BitRange,
+        })
+        .access(svd::restriction::generate_access(f.access))
+        .write_constraint(write_constraint)
+        .enumerated_values(enumerated_values)
+        .build(svd_rs::ValidateLevel::Strict)
+        .map(svd_rs::Field::Single)?;
 
-    if let Some(a) = svd::restriction::generate_access(f.access)? {
-        el.children.push(a);
-    }
-
-    el.children.extend(svd::restriction::generate(
-        &f.restriction,
-        f.width(),
-        &f.name,
-    )?);
-
-    Ok(el)
+    Ok(field)
 }

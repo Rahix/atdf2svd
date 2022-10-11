@@ -1,48 +1,39 @@
 use crate::chip;
-use crate::svd;
-use crate::ElementExt;
+use crate::svd::restriction::generate_access;
 
-pub fn generate(r: &chip::Register, base: usize) -> crate::Result<xmltree::Element> {
-    let mut el = xmltree::Element::new("register");
+pub fn generate(r: &chip::Register, base: u32) -> crate::Result<svd_rs::Register> {
+    let (write_constraint, _) = crate::svd::restriction::generate(&r.restriction, r.size as u32 * 8)?;
 
-    el.child_with_text("name", r.name.clone());
-    el.child_with_text(
-        "description",
-        if let Some(ref desc) = r.description {
-            desc.as_ref()
+    let register = svd_rs::RegisterInfo::builder()
+        .name(r.name.clone())
+        .description(r.description.clone().or_else(|| {
+            log::warn!("Description missing for register \"{}\"", r.name);
+            None
+        }))
+        .address_offset(r.address as u32 - base)
+        .size(if r.size != 0 {
+            Some(r.size as u32 * 8)
         } else {
-            log::warn!("Description missing for register {:?}", r.name);
-            "No Description."
-        },
-    );
-    el.child_with_text("addressOffset", format!("0x{:X}", r.address - base));
+            None
+        })
+        .access(generate_access(r.access))
+        .write_constraint(write_constraint);
 
-    if r.size != 1 {
-        el.child_with_text("size", (r.size * 8).to_string());
-    }
+    let mut fields = r.fields.values().collect::<Vec<_>>();
+    fields.sort_by(|a, b| a.range.0.cmp(&b.range.0));
 
-    if let Some(a) = svd::restriction::generate_access(r.access)? {
-        el.children.push(a);
-    }
+    let fields = fields
+        .into_iter()
+        .map(crate::svd::field::generate)
+        .collect::<Result<Vec<_>, _>>()?;
 
-    el.children.extend(svd::restriction::generate(
-        &r.restriction,
-        r.size * 8,
-        &r.name,
-    )?);
-
-    if !r.fields.is_empty() {
-        let mut fields_el = xmltree::Element::new("fields");
-
-        let mut fields: Vec<_> = r.fields.values().collect();
-        fields.sort_by(|a, b| a.range.0.cmp(&b.range.0));
-        fields_el.children = fields
-            .into_iter()
-            .map(svd::field::generate)
-            .collect::<Result<Vec<_>, _>>()?;
-
-        el.children.push(fields_el);
-    }
-
-    Ok(el)
+    register
+        .fields(if !fields.is_empty() {
+            Some(fields)
+        } else {
+            None
+        })
+        .build(svd_rs::ValidateLevel::Strict)
+        .map(svd_rs::Register::Single)
+        .map_err(crate::Error::from)
 }

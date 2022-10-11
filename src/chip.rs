@@ -48,7 +48,7 @@ pub enum AccessMode {
 pub enum ValueRestriction {
     Unsafe,
     Any,
-    Range(usize, usize),
+    Range(u64, u64),
     Enumerated(BTreeMap<String, EnumeratedValue>),
 }
 
