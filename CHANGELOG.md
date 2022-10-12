@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added an optional patch for removing common prefixes from register names.  It
+  can be enabled with the `--auto-patches remove_register_common_prefix`
+  commandline option ([#33]).
+- Added translation of the ATDF architecture and series into appropriate SVD
+  fields ([#32]).
+
+[#32]: https://github.com/Rahix/atdf2svd/pull/32
+[#33]: https://github.com/Rahix/atdf2svd/pull/33
 
 
 ## [0.3.2] - 2022-09-20
