@@ -62,3 +62,44 @@ pub fn remove_unsafe_cpu_regs(chip: &mut chip::Chip, _el: &xmltree::Element) -> 
 
     Ok(())
 }
+
+fn longest_common_prefix<'a>(strings: &[&'a str]) -> &'a str {
+    if strings.is_empty() {
+        return "";
+    }
+
+    let mut longest_prefix = "";
+    for prefix in strings[0].char_indices().map(|(i, _)| strings[0].split_at(i).0) {
+        if strings.iter().all(|s| s.starts_with(prefix)) {
+            longest_prefix = prefix;
+        } else {
+            // This prefix no longer matches so the previous one was the longest.
+            break;
+        }
+    }
+    longest_prefix
+}
+
+pub fn remove_register_common_prefix(chip: &mut chip::Chip) -> crate::Result<()> {
+    for peripheral in chip.peripherals.values_mut() {
+        // There's not enough quorum in less than two elements to find a
+        // prefix.
+        if peripheral.registers.len() < 2 {
+            continue;
+        }
+
+        let register_names: Vec<_> = peripheral.registers.keys().map(String::as_str).collect();
+        let common_prefix = longest_common_prefix(&register_names).to_string();
+
+        let is_valid_prefix = common_prefix.ends_with("_") && common_prefix.chars().count() >= 2;
+        if is_valid_prefix {
+            for register in peripheral.registers.values_mut() {
+                if let Some(s) = register.name.strip_prefix(&common_prefix) {
+                    register.name = s.to_string();
+                }
+            }
+        }
+    }
+
+    Ok(())
+}
