@@ -61,7 +61,7 @@ pub fn generate(p: &chip::Peripheral) -> crate::Result<svd_rs::Peripheral> {
         .name(p.name.clone())
         .description(p.description.clone().or_else(|| {
             log::warn!("Description missing for peripheral {:?}", p.name);
-            None
+            Some("No Description.".to_owned())
         }))
         .base_address(u64::from(base))
         .address_block(create_address_blocks(p)?)

@@ -8,7 +8,7 @@ pub fn generate(r: &chip::Register, base: u32) -> crate::Result<svd_rs::Register
         .name(r.name.clone())
         .description(r.description.clone().or_else(|| {
             log::warn!("Description missing for register \"{}\"", r.name);
-            None
+            Some("No Description.".to_owned())
         }))
         .address_offset(r.address as u32 - base)
         .size(if r.size != 0 {

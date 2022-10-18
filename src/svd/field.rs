@@ -11,7 +11,7 @@ pub fn generate(f: &chip::Field) -> crate::Result<svd_rs::Field> {
         .name(f.name.clone())
         .description(f.description.clone().or_else(|| {
             log::warn!("Description missing for field {:?}", f.name);
-            Some("No description.".to_owned())
+            Some("No Description.".to_owned())
         }))
         .bit_range(svd_rs::BitRange {
             offset: lsb,

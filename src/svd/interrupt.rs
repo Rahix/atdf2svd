@@ -14,7 +14,10 @@ pub fn generate(peripherals: &mut [svd_rs::Peripheral], c: &chip::Chip) -> crate
                 .map(|interrupt| {
                     svd_rs::Interrupt::builder()
                         .name(interrupt.name.clone())
-                        .description(interrupt.description.clone())
+                        .description(interrupt.description.clone().or_else(|| {
+                            log::warn!("Description missing for interrupt {:?}", interrupt.name);
+                            Some("No Description.".to_owned())
+                        }))
                         .value(interrupt.index.try_into().map_err(crate::Error::from)?)
                         .build(svd_rs::ValidateLevel::Strict)
                         .map_err(crate::Error::from)
