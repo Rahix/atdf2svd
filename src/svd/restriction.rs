@@ -62,7 +62,7 @@ pub fn generate_enumerated(e: &chip::EnumeratedValue) -> crate::Result<svd_rs::E
         .name(e.name.clone())
         .description(e.description.clone().or_else(|| {
             log::warn!("Description missing for enumeratedValue {:?}", e.name);
-            None
+            Some("No Description.".to_owned())
         }))
         .value(Some(e.value.try_into()?))
         .build(svd_rs::ValidateLevel::Strict)
