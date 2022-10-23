@@ -2,7 +2,8 @@ use crate::chip;
 use crate::svd::restriction::generate_access;
 
 pub fn generate(r: &chip::Register, base: u32) -> crate::Result<svd_rs::Register> {
-    let (write_constraint, _) = crate::svd::restriction::generate(&r.restriction, r.size as u32 * 8)?;
+    let (write_constraint, _) =
+        crate::svd::restriction::generate(&r.restriction, r.size as u32 * 8)?;
 
     let register = svd_rs::RegisterInfo::builder()
         .name(r.name.clone())

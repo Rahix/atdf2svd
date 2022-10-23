@@ -69,7 +69,10 @@ fn longest_common_prefix<'a>(strings: &[&'a str]) -> &'a str {
     }
 
     let mut longest_prefix = "";
-    for prefix in strings[0].char_indices().map(|(i, _)| strings[0].split_at(i).0) {
+    for prefix in strings[0]
+        .char_indices()
+        .map(|(i, _)| strings[0].split_at(i).0)
+    {
         if strings.iter().all(|s| s.starts_with(prefix)) {
             longest_prefix = prefix;
         } else {
