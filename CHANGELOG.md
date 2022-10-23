@@ -12,8 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added translation of the ATDF architecture and series into appropriate SVD
   fields ([#32]).
 
+### Changed
+- Internally switched to using [`svd-rs`] instead of hand-rolling the SVD file
+  ([#34]).
+
+### Fixed
+- Fixed generation of empty enumerated values ([#35]).
+
+[`svd-rs`]: https://crates.io/crates/svd-rs
 [#32]: https://github.com/Rahix/atdf2svd/pull/32
 [#33]: https://github.com/Rahix/atdf2svd/pull/33
+[#34]: https://github.com/Rahix/atdf2svd/pull/34
+[#35]: https://github.com/Rahix/atdf2svd/pull/35
 
 
 ## [0.3.2] - 2022-09-20
