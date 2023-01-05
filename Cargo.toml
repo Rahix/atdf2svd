@@ -19,13 +19,13 @@ exclude = [
 
 [dependencies]
 xmltree = "0.8.0"
-colored = "1.8.0"
-log = "0.4.6"
-env_logger = "0.7.1"
-gumdrop = "0.8.0"
-git-version = "0.3.4"
-svd-rs = "0.14.0"
-svd-encoder = "0.14.1"
+colored = "2.0.0"
+log = "0.4.17"
+env_logger = "0.10.0"
+gumdrop = "0.8.1"
+git-version = "0.3.5"
+svd-rs = "0.14.1"
+svd-encoder = "0.14.2"
 
 [dev-dependencies]
 insta = { version = "1.24.1", features = ["yaml"] }
