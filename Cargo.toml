@@ -12,6 +12,11 @@ keywords = ["atdf", "svd", "avr", "svd2rust"]
 categories = ["command-line-utilities", "embedded"]
 edition = "2018"
 
+exclude = [
+    "tests/",
+    ".github/",
+]
+
 [dependencies]
 xmltree = "0.8.0"
 colored = "1.8.0"
