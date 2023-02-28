@@ -23,10 +23,8 @@ pub fn parse_value_groups(module_el: &xmltree::Element) -> crate::Result<ValueGr
         for value_el in value_group_el
             .children
             .iter()
-            .filter_map(|node| node.as_element())
+            .filter_map(|node| node.as_element().filter(|e| e.name == "value"))
         {
-            value_el.check_name("value")?;
-
             let name = value_el.attr("name")?.clone();
             let description = value_el
                 .attributes

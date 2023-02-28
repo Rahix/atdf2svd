@@ -20,9 +20,6 @@ pub trait ElementExt {
         attr: &str,
         value: &str,
     ) -> crate::Result<&Self>;
-
-    /// Check the name to be the expected value or error
-    fn check_name(&self, name: &str) -> crate::Result<()>;
 }
 
 impl ElementExt for xmltree::Element {
@@ -79,14 +76,6 @@ impl ElementExt for xmltree::Element {
                 )
                 .into()
             })
-    }
-
-    fn check_name(&self, name: &str) -> crate::Result<()> {
-        if self.name == name {
-            Ok(())
-        } else {
-            Err(error::WrongName::new(name, self).into())
-        }
     }
 }
 

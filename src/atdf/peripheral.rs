@@ -9,13 +9,26 @@ pub fn parse_list(
 ) -> crate::Result<Vec<chip::Peripheral>> {
     let mut peripherals = vec![];
 
-    for module in el.children.iter().filter_map(|node| node.as_element()) {
-        module.check_name("module")?;
+    for module in el.children.iter().filter_map(|node| {
+        let module = node.as_element().filter(|e| e.name == "module");
+
+        if module.is_none() {
+            log::warn!("Unhandled module element: {module:?}");
+        }
+
+        module
+    }) {
         let module_name = module.attr("name")?;
 
-        for instance in module.children.iter().filter_map(|node| node.as_element()) {
-            instance.check_name("instance")?;
+        for instance in module.children.iter().filter_map(|node| {
+            let instance = node.as_element().filter(|e| e.name == "instance");
 
+            if instance.is_none() {
+                log::warn!("Unhandled instance element: {module:?}");
+            }
+
+            instance
+        }) {
             let mut registers = vec![];
 
             // Find corresponding module

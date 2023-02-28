@@ -7,7 +7,7 @@ pub fn parse(
     bitfield_el: &xmltree::Element,
     value_groups: &atdf::values::ValueGroups,
 ) -> crate::Result<chip::Field> {
-    bitfield_el.check_name("bitfield")?;
+    debug_assert!(bitfield_el.name == "bitfield");
 
     let name = bitfield_el.attr("name")?.clone();
     let description = bitfield_el
