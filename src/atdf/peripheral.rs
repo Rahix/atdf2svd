@@ -9,11 +9,11 @@ pub fn parse_list(
 ) -> crate::Result<Vec<chip::Peripheral>> {
     let mut peripherals = vec![];
 
-    for module in el.children.iter() {
+    for module in el.children.iter().filter_map(|node| node.as_element()) {
         module.check_name("module")?;
         let module_name = module.attr("name")?;
 
-        for instance in module.children.iter() {
+        for instance in module.children.iter().filter_map(|node| node.as_element()) {
             instance.check_name("instance")?;
 
             let mut registers = vec![];
@@ -28,23 +28,22 @@ pub fn parse_list(
             for register_group in instance
                 .children
                 .iter()
-                .filter(|c| c.name == "register-group")
+                .filter_map(|node| node.as_element().filter(|e| e.name == "register-group"))
             {
                 let name = register_group.attr("name-in-module")?;
                 let offset = util::parse_int(register_group.attr("offset")?)?;
 
                 let group = module.first_child_by_attr(Some("register-group"), "name", name)?;
 
-                for register in group
-                    .children
-                    .iter()
-                    .inspect(|e| {
-                        if e.name != "register" {
-                            log::warn!("Unhandled register node: {:?}", e.debug())
-                        }
-                    })
-                    .filter(|e| e.name == "register")
-                {
+                for register in group.children.iter().filter_map(|node| {
+                    let register = node.as_element().filter(|e| e.name == "register");
+
+                    if register.is_none() {
+                        log::warn!("Unhandled register node: {node:?}");
+                    }
+
+                    register
+                }) {
                     registers.push(atdf::register::parse(register, offset, &value_groups)?);
                 }
             }

@@ -27,6 +27,7 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
             .first_child("signals")?
             .children
             .iter()
+            .filter_map(|node| node.as_element())
             .map(|el| el.attr("index"))
             .map(|r| r.and_then(|s| util::parse_int(s)))
             .collect::<Result<_, _>>()?;

@@ -63,6 +63,7 @@ impl ElementExt for xmltree::Element {
     ) -> crate::Result<&Self> {
         self.children
             .iter()
+            .filter_map(|node| node.as_element())
             .find(|c| {
                 if let Some(n) = name {
                     if n != c.name {
