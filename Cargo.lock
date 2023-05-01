@@ -292,9 +292,9 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 
 [[package]]
 name = "once_cell"
-version = "1.15.0"
+version = "1.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e82dad04139b71a90c080c8463fe0dc7902db5192d939bd0950f074d014339e1"
+checksum = "b7e5500299e16ebb147ae15a00a942af264cf3688f47923b8fc2cd5858f23ad3"
 
 [[package]]
 name = "proc-macro-hack"
@@ -365,9 +365,9 @@ checksum = "420acb44afdae038210c99e69aae24109f32f15500aa708e81d46c9f29d55fcf"
 
 [[package]]
 name = "svd-encoder"
-version = "0.14.2"
+version = "0.14.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "151c5493e7dddd69dcb955c6096f16761ce78e720d0d84c772fc4f5285604f95"
+checksum = "8fafe4cf2cb0ef2ef2cc33e51ad0c3d196e1cc45843a54bb8af18cf9ce6531dd"
 dependencies = [
  "convert_case",
  "svd-rs",
@@ -377,9 +377,9 @@ dependencies = [
 
 [[package]]
 name = "svd-rs"
-version = "0.14.1"
+version = "0.14.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b71b720c7939c8b91c54ffd313444c29b1421e8d8ffe12a2a4e8c6b4aac05b43"
+checksum = "d08273bc4ca66b632299903960efa8a306aac61dc6381bcf07450c20b1a5443c"
 dependencies = [
  "once_cell",
  "regex",
