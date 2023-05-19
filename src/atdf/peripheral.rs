@@ -9,26 +9,10 @@ pub fn parse_list(
 ) -> crate::Result<Vec<chip::Peripheral>> {
     let mut peripherals = vec![];
 
-    for module in el.children.iter().filter_map(|node| {
-        let module = node.as_element().filter(|e| e.name == "module");
-
-        if module.is_none() {
-            log::warn!("Unhandled module element: {module:?}");
-        }
-
-        module
-    }) {
+    for module in el.iter_children_with_name("module", None) {
         let module_name = module.attr("name")?;
 
-        for instance in module.children.iter().filter_map(|node| {
-            let instance = node.as_element().filter(|e| e.name == "instance");
-
-            if instance.is_none() {
-                log::warn!("Unhandled instance element: {module:?}");
-            }
-
-            instance
-        }) {
+        for instance in module.iter_children_with_name("instance", Some("module")) {
             let mut registers = vec![];
 
             // Find corresponding module
@@ -48,15 +32,7 @@ pub fn parse_list(
 
                 let group = module.first_child_by_attr(Some("register-group"), "name", name)?;
 
-                for register in group.children.iter().filter_map(|node| {
-                    let register = node.as_element().filter(|e| e.name == "register");
-
-                    if register.is_none() {
-                        log::warn!("Unhandled register node: {node:?}");
-                    }
-
-                    register
-                }) {
+                for register in group.iter_children_with_name("register", Some("register-group")) {
                     registers.push(atdf::register::parse(register, offset, &value_groups)?);
                 }
             }

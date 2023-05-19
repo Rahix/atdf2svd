@@ -1,5 +1,7 @@
 //! Extensions to the xmltree::Element for convenience
 
+use xmltree::Element;
+
 /// Extensions to the xmltree::Element for convenience
 pub trait ElementExt {
     /// Create a debug representation of this element
@@ -20,6 +22,12 @@ pub trait ElementExt {
         attr: &str,
         value: &str,
     ) -> crate::Result<&Self>;
+
+    fn iter_children_with_name<'a>(
+        &'a self,
+        name: &'static str,
+        parent_name: Option<&'static str>,
+    ) -> Box<dyn Iterator<Item = &'a Element> + 'a>;
 }
 
 impl ElementExt for xmltree::Element {
@@ -77,6 +85,29 @@ impl ElementExt for xmltree::Element {
                 .into()
             })
     }
+
+    fn iter_children_with_name<'a>(
+        &'a self,
+        name: &'static str,
+        parent_name: Option<&'static str>,
+    ) -> Box<dyn Iterator<Item = &'a Element> + 'a> {
+        Box::new(self.children.iter().filter_map(move |node| {
+            // Ignore comments.
+            if node.as_comment().is_some() {
+                return None;
+            }
+
+            let child = node.as_element().filter(|e| e.name == name);
+
+            if let Some(parent_name) = parent_name {
+                if child.is_none() {
+                    log::warn!("Unhandled child element in <{parent_name}>: {child:?}");
+                }
+            }
+
+            child
+        }))
+    }
 }
 
 pub mod error {
@@ -113,20 +144,6 @@ pub mod error {
     impl MissingElement {
         pub fn new<S: Into<String>>(name: S, el: &xmltree::Element) -> Self {
             MissingElement(name.into(), el.debug())
-        }
-    }
-
-    pub struct WrongName(String, String);
-
-    impl crate::DisplayError for WrongName {
-        fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
-            write!(w, "Expected {:?} but got\n   {}", self.0, self.1.dimmed())
-        }
-    }
-
-    impl WrongName {
-        pub fn new<S: Into<String>>(name: S, el: &xmltree::Element) -> Self {
-            WrongName(name.into(), el.debug())
         }
     }
 }

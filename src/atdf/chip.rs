@@ -23,17 +23,7 @@ pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {
 
     let interrupts_vec = device
         .first_child("interrupts")?
-        .children
-        .iter()
-        .filter_map(|node| {
-            let interrupt = node.as_element().filter(|e| e.name == "interrupt");
-
-            if interrupt.is_none() {
-                log::warn!("Unhandled interrupt node: {node:?}");
-            }
-
-            interrupt
-        })
+        .iter_children_with_name("interrupt", Some("interrupts"))
         .map(atdf::interrupt::parse)
         .collect::<Result<Vec<_>, _>>()?;
 
