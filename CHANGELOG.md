@@ -10,12 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   generated output.  Important for contributors:  If the changes _are_ intended,
   you can use `cargo insta review` to sign off on the changes and add them as part
   of your contribution ([#37]).
-  
+
 ### Changed
 - Updated most dependencies.
-- Updated `xmltree` to version `0.10`.
+- Updated `xmltree` to version `0.10` ([#41]).
 
 [#37]: https://github.com/Rahix/atdf2svd/pull/37
+[#41]: https://github.com/Rahix/atdf2svd/pull/41
 
 
 ## [0.3.3] - 2022-10-23
