@@ -15,14 +15,16 @@ pub fn parse_value_groups(module_el: &xmltree::Element) -> crate::Result<ValueGr
     for value_group_el in module_el
         .children
         .iter()
-        .filter(|m| m.name == "value-group")
+        .filter_map(|node| node.as_element().filter(|e| e.name == "value-group"))
     {
         let group_name = value_group_el.attr("name")?.clone();
 
         let mut enumerated_values = BTreeMap::new();
-        for value_el in value_group_el.children.iter() {
-            value_el.check_name("value")?;
-
+        for value_el in value_group_el
+            .children
+            .iter()
+            .filter_map(|node| node.as_element().filter(|e| e.name == "value"))
+        {
             let name = value_el.attr("name")?.clone();
             let description = value_el
                 .attributes

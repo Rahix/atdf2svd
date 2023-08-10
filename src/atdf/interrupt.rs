@@ -3,7 +3,7 @@ use crate::util;
 use crate::ElementExt;
 
 pub fn parse(interrupt: &xmltree::Element) -> crate::Result<chip::Interrupt> {
-    interrupt.check_name("interrupt")?;
+    debug_assert!(interrupt.name == "interrupt");
 
     let name = {
         let inst_name = interrupt.attr("name")?;

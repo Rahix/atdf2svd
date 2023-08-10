@@ -9,13 +9,10 @@ pub fn parse_list(
 ) -> crate::Result<Vec<chip::Peripheral>> {
     let mut peripherals = vec![];
 
-    for module in el.children.iter() {
-        module.check_name("module")?;
+    for module in el.iter_children_with_name("module", None) {
         let module_name = module.attr("name")?;
 
-        for instance in module.children.iter() {
-            instance.check_name("instance")?;
-
+        for instance in module.iter_children_with_name("instance", Some("module")) {
             let mut registers = vec![];
 
             // Find corresponding module
@@ -28,23 +25,14 @@ pub fn parse_list(
             for register_group in instance
                 .children
                 .iter()
-                .filter(|c| c.name == "register-group")
+                .filter_map(|node| node.as_element().filter(|e| e.name == "register-group"))
             {
                 let name = register_group.attr("name-in-module")?;
                 let offset = util::parse_int(register_group.attr("offset")?)?;
 
                 let group = module.first_child_by_attr(Some("register-group"), "name", name)?;
 
-                for register in group
-                    .children
-                    .iter()
-                    .inspect(|e| {
-                        if e.name != "register" {
-                            log::warn!("Unhandled register node: {:?}", e.debug())
-                        }
-                    })
-                    .filter(|e| e.name == "register")
-                {
+                for register in group.iter_children_with_name("register", Some("register-group")) {
                     registers.push(atdf::register::parse(register, offset, &value_groups)?);
                 }
             }

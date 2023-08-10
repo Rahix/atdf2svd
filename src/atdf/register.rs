@@ -32,7 +32,7 @@ pub fn parse(
     let fields: BTreeMap<String, chip::Field> = el
         .children
         .iter()
-        .filter(|c| c.name == "bitfield")
+        .filter_map(|node| node.as_element().filter(|e| e.name == "bitfield"))
         .map(|e| atdf::field::parse(e, values))
         .map(|r| r.map(|f| (f.name.clone(), f)))
         .collect::<Result<BTreeMap<_, _>, _>>()?;
