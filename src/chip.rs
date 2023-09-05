@@ -56,6 +56,7 @@ pub enum ValueRestriction {
 pub struct Register {
     pub name: String,
     pub description: Option<String>,
+    pub mode: Option<String>,
     pub address: usize,
     pub size: usize,
     pub access: AccessMode,
