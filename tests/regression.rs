@@ -11,3 +11,10 @@ fn atmega128rfa1() {
     let svd = atdf2svd::run_test(&mut atdf, vec![]);
     insta::assert_display_snapshot!(svd);
 }
+
+#[test]
+fn attiny817() {
+    let mut atdf = std::fs::File::open("tests/attiny817.atdf").unwrap();
+    let svd = atdf2svd::run_test(&mut atdf, vec![]);
+    insta::assert_display_snapshot!(svd);
+}
