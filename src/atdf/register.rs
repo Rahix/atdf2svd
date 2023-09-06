@@ -17,6 +17,12 @@ pub fn parse(
         .and_then(|d| if !d.is_empty() { Some(d) } else { None })
         .cloned();
 
+    let mode = el
+        .attributes
+        .get("modes")
+        .and_then(|d| if !d.is_empty() { Some(d) } else { None })
+        .cloned();
+
     let access = if let Some(access) = el.attributes.get("rw") {
         match access.as_ref() {
             "" => chip::AccessMode::NoAccess,
@@ -40,6 +46,7 @@ pub fn parse(
     Ok(chip::Register {
         name,
         description,
+        mode,
         address: util::parse_int(el.attr("offset")?)? + offset,
         size: util::parse_int(el.attr("size")?)?,
         access,

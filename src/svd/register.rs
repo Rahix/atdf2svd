@@ -18,7 +18,8 @@ pub fn generate(r: &chip::Register, base: u32) -> crate::Result<svd_rs::Register
             None
         })
         .access(generate_access(r.access))
-        .write_constraint(write_constraint);
+        .write_constraint(write_constraint)
+        .alternate_group(r.mode.clone());
 
     let mut fields = r.fields.values().collect::<Vec<_>>();
     fields.sort_by(|a, b| a.range.0.cmp(&b.range.0));
