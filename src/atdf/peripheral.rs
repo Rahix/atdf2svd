@@ -37,15 +37,18 @@ pub fn parse_list(
                 }
             }
 
-            let registers = registers.into_iter().map(|r|
-                (
-                    match r.mode {
-                        Some(ref mode) => format!("{mode}_{}", r.name),
-                        _ => r.name.clone(),
-                    },
-                    r
-                )
-            ).collect();
+            let registers = registers
+                .into_iter()
+                .map(|r| {
+                    (
+                        match r.mode {
+                            Some(ref mode) => format!("{mode}_{}", r.name),
+                            _ => r.name.clone(),
+                        },
+                        r,
+                    )
+                })
+                .collect();
 
             peripherals.push(chip::Peripheral {
                 name: instance.attr("name")?.clone(),
