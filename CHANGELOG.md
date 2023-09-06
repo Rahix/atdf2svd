@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Support for registers with multiple modes (split peripherals) by emitting
+  `alternateGroup` elements in the SVD ([#48]).
 - Added a regression testsuite to protect us against unintended changes in the
   generated output.  Important for contributors:  If the changes _are_ intended,
   you can use `cargo insta review` to sign off on the changes and add them as part
@@ -17,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [#37]: https://github.com/Rahix/atdf2svd/pull/37
 [#41]: https://github.com/Rahix/atdf2svd/pull/41
+[#48]: https://github.com/Rahix/atdf2svd/pull/48
 
 
 ## [0.3.3] - 2022-10-23
