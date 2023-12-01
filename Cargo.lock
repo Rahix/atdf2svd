@@ -362,9 +362,9 @@ dependencies = [
 
 [[package]]
 name = "svd-rs"
-version = "0.14.2"
+version = "0.14.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d08273bc4ca66b632299903960efa8a306aac61dc6381bcf07450c20b1a5443c"
+checksum = "88d664449a290ecd6253d977d350cdf4026781223a72473fc55ea1e456e2b5d9"
 dependencies = [
  "once_cell",
  "regex",
