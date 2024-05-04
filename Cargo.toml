@@ -30,8 +30,8 @@ svd-encoder = "0.14.2"
 [dev-dependencies]
 insta = { version = "1.28.0", features = ["yaml"] }
 
-[profile.dev.package.insta]
+[profile.test.package.insta]
 opt-level = 3
 
-[profile.dev.package.similar]
+[profile.test.package.similar]
 opt-level = 3
