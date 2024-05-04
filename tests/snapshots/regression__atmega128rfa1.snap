@@ -8837,7 +8837,7 @@ expression: svd
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>VAL_0x1</name>
-                  <description>RX_THRES > RSSI_BASE_VAL + 0 · 3; RSSI > -90 dBm</description>
+                  <description>RX_THRES &gt; RSSI_BASE_VAL + 0 · 3; RSSI &gt; -90 dBm</description>
                   <value>1</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -8847,12 +8847,12 @@ expression: svd
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>VAL_0xE</name>
-                  <description>RX_THRES > RSSI_BASE_VAL + 13 · 3; RSSI > -51 dBm</description>
+                  <description>RX_THRES &gt; RSSI_BASE_VAL + 13 · 3; RSSI &gt; -51 dBm</description>
                   <value>14</value>
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>RX_PDT_LEVEL_MAX</name>
-                  <description>RX_THRES > RSSI_BASE_VAL + 14 · 3; RSSI > -48 dBm</description>
+                  <description>RX_THRES &gt; RSSI_BASE_VAL + 14 · 3; RSSI &gt; -48 dBm</description>
                   <value>15</value>
                 </enumeratedValue>
               </enumeratedValues>
