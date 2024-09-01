@@ -339,9 +339,9 @@ checksum = "fa42c91313f1d05da9b26f267f931cf178d4aba455b4c4622dd7355eb80c6640"
 
 [[package]]
 name = "svd-encoder"
-version = "0.14.4"
+version = "0.14.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52b194a3618fb27161e7b03d5caf27fffefe5299ea4ba60b045a6a00a097765f"
+checksum = "58d65c081e57b40256110a6bac0bb654dffd1663196eb2d0e13ec1d673d68ab1"
 dependencies = [
  "convert_case",
  "svd-rs",
@@ -351,9 +351,9 @@ dependencies = [
 
 [[package]]
 name = "svd-rs"
-version = "0.14.8"
+version = "0.14.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6aea8090314157cc490b559da0c66f2228c066b56154f0321ad83b459a0a8278"
+checksum = "3e49a90f3c4d03d81687e81d41b00f349fd44ccf9c26e0185ee926968de093bb"
 dependencies = [
  "once_cell",
  "regex",
