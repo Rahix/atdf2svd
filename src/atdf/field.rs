@@ -6,10 +6,15 @@ use crate::ElementExt;
 pub fn parse(
     bitfield_el: &xmltree::Element,
     value_groups: &atdf::values::ValueGroups,
+    mode_name: Option<String>,
 ) -> crate::Result<chip::Field> {
     debug_assert!(bitfield_el.name == "bitfield");
-
-    let name = bitfield_el.attr("name")?.clone();
+    let name;
+    if let Some(mode) = mode_name {
+        name = format!("{}_{}", mode, bitfield_el.attr("name")?.clone());
+    } else {
+        name = bitfield_el.attr("name")?.clone();
+    }
     let description = bitfield_el
         .attributes
         .get("caption")

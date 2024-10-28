@@ -35,14 +35,32 @@ pub fn parse(
         chip::AccessMode::ReadWrite
     };
 
-    let fields: BTreeMap<String, chip::Field> = el
+    let mut fields: BTreeMap<String, chip::Field> = el
         .children
         .iter()
         .filter_map(|node| node.as_element().filter(|e| e.name == "bitfield"))
-        .map(|e| atdf::field::parse(e, values))
+        .map(|e| atdf::field::parse(e, values, None))
         .map(|r| r.map(|f| (f.name.clone(), f)))
         .collect::<Result<BTreeMap<_, _>, _>>()?;
 
+    let modes = el
+        .children
+        .iter()
+        .filter_map(|mode| mode.as_element().filter(|m| m.name == "mode"))
+        .into_iter();
+    for mode in modes {
+        if let Some(mode_name) = mode.attributes.get("name").cloned() {
+            let res = mode
+                .children
+                .clone()
+                .into_iter()
+                .filter_map(|el| el.as_element().filter(|e| e.name == "bitfield").cloned())
+                .map(|e| atdf::field::parse(&e, values, Some(mode_name.clone())))
+                .map(|r| r.map(|f| (f.name.clone(), f)))
+                .collect::<Result<BTreeMap<_, _>, _>>()?;
+            fields.append(&mut res.clone());
+        }
+    }
     Ok(chip::Register {
         name,
         description,
