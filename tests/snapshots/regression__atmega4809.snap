@@ -15654,12 +15654,50 @@ expression: svd
           <addressOffset>0x3</addressOffset>
           <size>0x8</size>
           <access>read-write</access>
-          <writeConstraint>
-            <range>
-              <minimum>0</minimum>
-              <maximum>255</maximum>
-            </range>
-          </writeConstraint>
+          <fields>
+            <field>
+              <name>BUFFERED_BUFOVF</name>
+              <description>Buffer Overflow</description>
+              <bitRange>[0:0]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>BUFFERED_SSIF</name>
+              <description>Slave Select Trigger Interrupt Flag</description>
+              <bitRange>[4:4]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>BUFFERED_DREIF</name>
+              <description>Data Register Empty Interrupt Flag</description>
+              <bitRange>[5:5]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>BUFFERED_TXCIF</name>
+              <description>Transfer Complete Interrupt Flag</description>
+              <bitRange>[6:6]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>DEFAULT_WRCOL</name>
+              <description>Write Collision</description>
+              <bitRange>[6:6]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>BUFFERED_RXCIF</name>
+              <description>Receive Complete Interrupt Flag</description>
+              <bitRange>[7:7]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>DEFAULT_IF</name>
+              <description>Interrupt Flag</description>
+              <bitRange>[7:7]</bitRange>
+              <access>read-write</access>
+            </field>
+          </fields>
         </register>
       </registers>
     </peripheral>
@@ -16848,12 +16886,66 @@ expression: svd
           <addressOffset>0x0</addressOffset>
           <size>0x8</size>
           <access>read-write</access>
-          <writeConstraint>
-            <range>
-              <minimum>0</minimum>
-              <maximum>255</maximum>
-            </range>
-          </writeConstraint>
+          <fields>
+            <field>
+              <name>DEFAULT_FMPEN</name>
+              <description>FM Plus Enable</description>
+              <bitRange>[1:1]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>DEFAULT_SDAHOLD</name>
+              <description>SDA Hold Time</description>
+              <bitRange>[3:2]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>OFF</name>
+                  <description>SDA hold time off</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>50NS</name>
+                  <description>Typical 50ns hold time</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>300NS</name>
+                  <description>Typical 300ns hold time</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>500NS</name>
+                  <description>Typical 500ns hold time</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>DEFAULT_SDASETUP</name>
+              <description>SDA Setup Time</description>
+              <bitRange>[4:4]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>4CYC</name>
+                  <description>SDA setup time is 4 clock cycles</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>8CYC</name>
+                  <description>SDA setup time is 8 clock cycles</description>
+                  <value>1</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+          </fields>
         </register>
         <register>
           <name>DBGCTRL</name>
@@ -16861,12 +16953,14 @@ expression: svd
           <addressOffset>0x2</addressOffset>
           <size>0x8</size>
           <access>read-write</access>
-          <writeConstraint>
-            <range>
-              <minimum>0</minimum>
-              <maximum>255</maximum>
-            </range>
-          </writeConstraint>
+          <fields>
+            <field>
+              <name>DEFAULT_DBGRUN</name>
+              <description>Debug Run</description>
+              <bitRange>[0:0]</bitRange>
+              <access>read-write</access>
+            </field>
+          </fields>
         </register>
         <register>
           <name>DUALCTRL</name>
@@ -16874,12 +16968,51 @@ expression: svd
           <addressOffset>0x1</addressOffset>
           <size>0x8</size>
           <access>read-write</access>
-          <writeConstraint>
-            <range>
-              <minimum>0</minimum>
-              <maximum>255</maximum>
-            </range>
-          </writeConstraint>
+          <fields>
+            <field>
+              <name>DEFAULT_ENABLE</name>
+              <description>Dual Control Enable</description>
+              <bitRange>[0:0]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>DEFAULT_FMPEN</name>
+              <description>FM Plus Enable</description>
+              <bitRange>[1:1]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>DEFAULT_SDAHOLD</name>
+              <description>SDA Hold Time</description>
+              <bitRange>[3:2]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>OFF</name>
+                  <description>SDA hold time off</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>50NS</name>
+                  <description>Typical 50ns hold time</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>300NS</name>
+                  <description>Typical 300ns hold time</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>500NS</name>
+                  <description>Typical 500ns hold time</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+          </fields>
         </register>
         <register>
           <name>MADDR</name>
@@ -17531,12 +17664,170 @@ expression: svd
           <addressOffset>0x7</addressOffset>
           <size>0x8</size>
           <access>read-write</access>
-          <writeConstraint>
-            <range>
-              <minimum>0</minimum>
-              <maximum>255</maximum>
-            </range>
-          </writeConstraint>
+          <fields>
+            <field>
+              <name>NORMAL_CHSIZE</name>
+              <description>Character Size</description>
+              <bitRange>[2:0]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>5BIT</name>
+                  <description>Character size: 5 bit</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>6BIT</name>
+                  <description>Character size: 6 bit</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>7BIT</name>
+                  <description>Character size: 7 bit</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>8BIT</name>
+                  <description>Character size: 8 bit</description>
+                  <value>3</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>9BITL</name>
+                  <description>Character size: 9 bit read low byte first</description>
+                  <value>6</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>9BITH</name>
+                  <description>Character size: 9 bit read high byte first</description>
+                  <value>7</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>MSPI_UCPHA</name>
+              <description>SPI Master Mode, Clock Phase</description>
+              <bitRange>[1:1]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>MSPI_UDORD</name>
+              <description>SPI Master Mode, Data Order</description>
+              <bitRange>[2:2]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>NORMAL_SBMODE</name>
+              <description>Stop Bit Mode</description>
+              <bitRange>[3:3]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>1BIT</name>
+                  <description>1 stop bit</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>2BIT</name>
+                  <description>2 stop bits</description>
+                  <value>1</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>NORMAL_PMODE</name>
+              <description>Parity Mode</description>
+              <bitRange>[5:4]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>DISABLED</name>
+                  <description>No Parity</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>EVEN</name>
+                  <description>Even Parity</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>ODD</name>
+                  <description>Odd Parity</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>MSPI_CMODE</name>
+              <description>Communication Mode</description>
+              <bitRange>[7:6]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>ASYNCHRONOUS</name>
+                  <description>Asynchronous Mode</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>SYNCHRONOUS</name>
+                  <description>Synchronous Mode</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>IRCOM</name>
+                  <description>Infrared Communication</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>MSPI</name>
+                  <description>Master SPI Mode</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>NORMAL_CMODE</name>
+              <description>Communication Mode</description>
+              <bitRange>[7:6]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>ASYNCHRONOUS</name>
+                  <description>Asynchronous Mode</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>SYNCHRONOUS</name>
+                  <description>Synchronous Mode</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>IRCOM</name>
+                  <description>Infrared Communication</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>MSPI</name>
+                  <description>Master SPI Mode</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+          </fields>
         </register>
         <register>
           <name>CTRLD</name>
@@ -17975,12 +18266,170 @@ expression: svd
           <addressOffset>0x7</addressOffset>
           <size>0x8</size>
           <access>read-write</access>
-          <writeConstraint>
-            <range>
-              <minimum>0</minimum>
-              <maximum>255</maximum>
-            </range>
-          </writeConstraint>
+          <fields>
+            <field>
+              <name>NORMAL_CHSIZE</name>
+              <description>Character Size</description>
+              <bitRange>[2:0]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>5BIT</name>
+                  <description>Character size: 5 bit</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>6BIT</name>
+                  <description>Character size: 6 bit</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>7BIT</name>
+                  <description>Character size: 7 bit</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>8BIT</name>
+                  <description>Character size: 8 bit</description>
+                  <value>3</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>9BITL</name>
+                  <description>Character size: 9 bit read low byte first</description>
+                  <value>6</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>9BITH</name>
+                  <description>Character size: 9 bit read high byte first</description>
+                  <value>7</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>MSPI_UCPHA</name>
+              <description>SPI Master Mode, Clock Phase</description>
+              <bitRange>[1:1]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>MSPI_UDORD</name>
+              <description>SPI Master Mode, Data Order</description>
+              <bitRange>[2:2]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>NORMAL_SBMODE</name>
+              <description>Stop Bit Mode</description>
+              <bitRange>[3:3]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>1BIT</name>
+                  <description>1 stop bit</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>2BIT</name>
+                  <description>2 stop bits</description>
+                  <value>1</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>NORMAL_PMODE</name>
+              <description>Parity Mode</description>
+              <bitRange>[5:4]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>DISABLED</name>
+                  <description>No Parity</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>EVEN</name>
+                  <description>Even Parity</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>ODD</name>
+                  <description>Odd Parity</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>MSPI_CMODE</name>
+              <description>Communication Mode</description>
+              <bitRange>[7:6]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>ASYNCHRONOUS</name>
+                  <description>Asynchronous Mode</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>SYNCHRONOUS</name>
+                  <description>Synchronous Mode</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>IRCOM</name>
+                  <description>Infrared Communication</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>MSPI</name>
+                  <description>Master SPI Mode</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>NORMAL_CMODE</name>
+              <description>Communication Mode</description>
+              <bitRange>[7:6]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>ASYNCHRONOUS</name>
+                  <description>Asynchronous Mode</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>SYNCHRONOUS</name>
+                  <description>Synchronous Mode</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>IRCOM</name>
+                  <description>Infrared Communication</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>MSPI</name>
+                  <description>Master SPI Mode</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+          </fields>
         </register>
         <register>
           <name>CTRLD</name>
@@ -18419,12 +18868,170 @@ expression: svd
           <addressOffset>0x7</addressOffset>
           <size>0x8</size>
           <access>read-write</access>
-          <writeConstraint>
-            <range>
-              <minimum>0</minimum>
-              <maximum>255</maximum>
-            </range>
-          </writeConstraint>
+          <fields>
+            <field>
+              <name>NORMAL_CHSIZE</name>
+              <description>Character Size</description>
+              <bitRange>[2:0]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>5BIT</name>
+                  <description>Character size: 5 bit</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>6BIT</name>
+                  <description>Character size: 6 bit</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>7BIT</name>
+                  <description>Character size: 7 bit</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>8BIT</name>
+                  <description>Character size: 8 bit</description>
+                  <value>3</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>9BITL</name>
+                  <description>Character size: 9 bit read low byte first</description>
+                  <value>6</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>9BITH</name>
+                  <description>Character size: 9 bit read high byte first</description>
+                  <value>7</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>MSPI_UCPHA</name>
+              <description>SPI Master Mode, Clock Phase</description>
+              <bitRange>[1:1]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>MSPI_UDORD</name>
+              <description>SPI Master Mode, Data Order</description>
+              <bitRange>[2:2]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>NORMAL_SBMODE</name>
+              <description>Stop Bit Mode</description>
+              <bitRange>[3:3]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>1BIT</name>
+                  <description>1 stop bit</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>2BIT</name>
+                  <description>2 stop bits</description>
+                  <value>1</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>NORMAL_PMODE</name>
+              <description>Parity Mode</description>
+              <bitRange>[5:4]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>DISABLED</name>
+                  <description>No Parity</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>EVEN</name>
+                  <description>Even Parity</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>ODD</name>
+                  <description>Odd Parity</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>MSPI_CMODE</name>
+              <description>Communication Mode</description>
+              <bitRange>[7:6]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>ASYNCHRONOUS</name>
+                  <description>Asynchronous Mode</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>SYNCHRONOUS</name>
+                  <description>Synchronous Mode</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>IRCOM</name>
+                  <description>Infrared Communication</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>MSPI</name>
+                  <description>Master SPI Mode</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>NORMAL_CMODE</name>
+              <description>Communication Mode</description>
+              <bitRange>[7:6]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>ASYNCHRONOUS</name>
+                  <description>Asynchronous Mode</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>SYNCHRONOUS</name>
+                  <description>Synchronous Mode</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>IRCOM</name>
+                  <description>Infrared Communication</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>MSPI</name>
+                  <description>Master SPI Mode</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+          </fields>
         </register>
         <register>
           <name>CTRLD</name>
@@ -18863,12 +19470,170 @@ expression: svd
           <addressOffset>0x7</addressOffset>
           <size>0x8</size>
           <access>read-write</access>
-          <writeConstraint>
-            <range>
-              <minimum>0</minimum>
-              <maximum>255</maximum>
-            </range>
-          </writeConstraint>
+          <fields>
+            <field>
+              <name>NORMAL_CHSIZE</name>
+              <description>Character Size</description>
+              <bitRange>[2:0]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>5BIT</name>
+                  <description>Character size: 5 bit</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>6BIT</name>
+                  <description>Character size: 6 bit</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>7BIT</name>
+                  <description>Character size: 7 bit</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>8BIT</name>
+                  <description>Character size: 8 bit</description>
+                  <value>3</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>9BITL</name>
+                  <description>Character size: 9 bit read low byte first</description>
+                  <value>6</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>9BITH</name>
+                  <description>Character size: 9 bit read high byte first</description>
+                  <value>7</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>MSPI_UCPHA</name>
+              <description>SPI Master Mode, Clock Phase</description>
+              <bitRange>[1:1]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>MSPI_UDORD</name>
+              <description>SPI Master Mode, Data Order</description>
+              <bitRange>[2:2]</bitRange>
+              <access>read-write</access>
+            </field>
+            <field>
+              <name>NORMAL_SBMODE</name>
+              <description>Stop Bit Mode</description>
+              <bitRange>[3:3]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>1BIT</name>
+                  <description>1 stop bit</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>2BIT</name>
+                  <description>2 stop bits</description>
+                  <value>1</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>NORMAL_PMODE</name>
+              <description>Parity Mode</description>
+              <bitRange>[5:4]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>DISABLED</name>
+                  <description>No Parity</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>EVEN</name>
+                  <description>Even Parity</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>ODD</name>
+                  <description>Odd Parity</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>MSPI_CMODE</name>
+              <description>Communication Mode</description>
+              <bitRange>[7:6]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>ASYNCHRONOUS</name>
+                  <description>Asynchronous Mode</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>SYNCHRONOUS</name>
+                  <description>Synchronous Mode</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>IRCOM</name>
+                  <description>Infrared Communication</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>MSPI</name>
+                  <description>Master SPI Mode</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>NORMAL_CMODE</name>
+              <description>Communication Mode</description>
+              <bitRange>[7:6]</bitRange>
+              <access>read-write</access>
+              <writeConstraint>
+                <useEnumeratedValues>true</useEnumeratedValues>
+              </writeConstraint>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>ASYNCHRONOUS</name>
+                  <description>Asynchronous Mode</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>SYNCHRONOUS</name>
+                  <description>Synchronous Mode</description>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>IRCOM</name>
+                  <description>Infrared Communication</description>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>MSPI</name>
+                  <description>Master SPI Mode</description>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+          </fields>
         </register>
         <register>
           <name>CTRLD</name>
