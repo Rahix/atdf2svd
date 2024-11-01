@@ -18,3 +18,10 @@ fn attiny817() {
     let svd = atdf2svd::run_test(&mut atdf, vec![]);
     insta::assert_snapshot!(svd);
 }
+
+#[test]
+fn atmega4809() {
+    let mut atdf = std::fs::File::open("tests/atmega4809.atdf").unwrap();
+    let svd = atdf2svd::run_test(&mut atdf, vec![]);
+    insta::assert_snapshot!(svd);
+}
