@@ -8,7 +8,7 @@ fn atmega328p() {
 #[test]
 fn atmega328p_ports_renamed() {
     let mut atdf = std::fs::File::open("tests/atmega328p.atdf").unwrap();
-    let svd = atdf2svd::run_test(&mut atdf, vec!["port_rename_snake_case".to_owned()]);
+    let svd = atdf2svd::run_test(&mut atdf, vec!["port_rename_snake_case"]);
     insta::assert_snapshot!(svd);
 }
 
