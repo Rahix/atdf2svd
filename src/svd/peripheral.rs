@@ -1,16 +1,27 @@
+use svd_rs::MaybeArray;
+
 use crate::chip;
 use crate::svd;
 use std::convert::TryInto;
 
-fn create_address_blocks(p: &chip::Peripheral) -> crate::Result<Option<Vec<svd_rs::AddressBlock>>> {
-    let mut registers: Vec<_> = p.registers.values().collect();
+fn create_address_blocks(
+    p: &chip::Peripheral,
+    base: usize,
+) -> crate::Result<Option<Vec<svd_rs::AddressBlock>>> {
+    let mut registers: Vec<_> = match p.is_union() {
+        true => {
+            let &(header, _) = p
+                .get_union_register_group_headers()
+                .first()
+                .expect("No union header found");
+            header.registers.values().collect()
+        }
+        false => p.registers.values().collect(),
+    };
     registers.sort_by(|a, b| a.address.cmp(&b.address));
 
-    let base = p.base_address().expect("no base address");
-    let new_address_block = |offset, size| {
-        let offset = (offset as usize - base)
-            .try_into()
-            .map_err(crate::Error::from)?;
+    let new_address_block = |offset: usize, size| {
+        let offset = (offset - base).try_into().map_err(crate::Error::from)?;
 
         svd_rs::AddressBlock::builder()
             .offset(offset)
@@ -51,11 +62,42 @@ pub fn generate(p: &chip::Peripheral) -> crate::Result<svd_rs::Peripheral> {
         .expect("Could not retrieve peripheral base address")
         .try_into()?;
 
-    let registers = p
-        .registers
-        .values()
-        .map(|r| svd::register::generate(r, base).map(svd_rs::RegisterCluster::Register))
-        .collect::<Result<Vec<_>, _>>()?;
+    let registers: Vec<svd_rs::RegisterCluster> = match p.is_union() {
+        true => {
+            println!("cargo:warning=svd generate union style {}", p.name);
+            p.get_union_register_group_headers()
+                .iter()
+                .map(|(header, item)| {
+                    let cluster = svd_rs::ClusterInfo::builder()
+                        .name(header.name.clone())
+                        .description(header.description.clone())
+                        .address_offset(item.offset.unwrap_or(0) as u32)
+                        .children(
+                            header
+                                .registers
+                                .values()
+                                .map(|r| {
+                                    svd::register::generate(r, base)
+                                        .map(svd_rs::RegisterCluster::Register)
+                                })
+                                .collect::<Result<Vec<_>, _>>()?,
+                        );
+
+                    cluster
+                        .build(svd_rs::ValidateLevel::Strict)
+                        .map(|cluster_info| {
+                            svd_rs::RegisterCluster::Cluster(MaybeArray::Single(cluster_info))
+                        })
+                        .map_err(crate::Error::from)
+                })
+                .collect::<Result<Vec<_>, _>>()?
+        }
+        false => p
+            .registers
+            .values()
+            .map(|r| svd::register::generate(r, base).map(svd_rs::RegisterCluster::Register))
+            .collect::<Result<Vec<_>, _>>()?,
+    };
 
     svd_rs::PeripheralInfo::builder()
         .name(p.name.clone())
@@ -64,7 +106,7 @@ pub fn generate(p: &chip::Peripheral) -> crate::Result<svd_rs::Peripheral> {
             Some("No Description.".to_owned())
         }))
         .base_address(u64::from(base))
-        .address_block(create_address_blocks(p)?)
+        .address_block(create_address_blocks(p, base as usize)?)
         .registers(Some(registers))
         .build(svd_rs::ValidateLevel::Strict)
         .map(svd_rs::Peripheral::Single)

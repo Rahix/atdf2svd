@@ -45,6 +45,12 @@ pub fn generate(c: &chip::Chip) -> crate::Result<svd_rs::Device> {
 }
 
 fn has_registers(peripheral: &&chip::Peripheral) -> bool {
+    if peripheral.is_union() {
+        return peripheral
+            .get_union_register_group_headers()
+            .iter()
+            .any(|(header, _)| !header.registers.values().len() > 0)
+    }
     let regs = !peripheral.registers.is_empty();
     if !regs {
         log::warn!("No registers found for peripheral {}", peripheral.name);
