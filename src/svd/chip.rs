@@ -49,7 +49,7 @@ fn has_registers(peripheral: &&chip::Peripheral) -> bool {
         return peripheral
             .get_union_register_group_headers()
             .iter()
-            .any(|(header, _)| !header.registers.values().len() > 0)
+            .any(|(header, _)| !header.registers.values().len() > 0);
     }
     let regs = !peripheral.registers.is_empty();
     if !regs {
