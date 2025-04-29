@@ -99,6 +99,11 @@ pub fn remove_register_common_prefix(chip: &mut chip::Chip) -> crate::Result<()>
         if is_valid_prefix {
             for register in peripheral.registers.values_mut() {
                 if let Some(s) = register.name.strip_prefix(&common_prefix) {
+                    log::debug!(
+                        "[remove_register_common_prefix] Renaming {} to {}",
+                        register.name,
+                        s
+                    );
                     register.name = s.to_string();
                 }
             }
