@@ -21,6 +21,10 @@ pub fn parse<R: std::io::Read>(
         .unwrap_or_else(|_| log::warn!("Could not apply 'signals_to_port_fields' patch!"));
     patch::remove_unsafe_cpu_regs(&mut chip, &tree)?;
 
+    if patches.contains("port_rename_snake_case") {
+        patch::port_rename_snake_case(&mut chip)?;
+    }
+
     if patches.contains("remove_register_common_prefix") {
         patch::remove_register_common_prefix(&mut chip)?;
     }

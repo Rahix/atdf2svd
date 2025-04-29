@@ -55,6 +55,27 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
     Ok(())
 }
 
+pub fn port_rename_snake_case(chip: &mut chip::Chip) -> crate::Result<()> {
+    let peripherals = std::mem::take(&mut chip.peripherals);
+    chip.peripherals = peripherals
+        .into_iter()
+        .map(|(name, mut port)| {
+            if port.name.starts_with("PORT") && port.name.len() == 5 {
+                let new_name = format!("PORT_{}", name.chars().last().unwrap());
+                log::debug!("[port_rename_snake_case] Renaming {name} to {new_name} ...");
+
+                port.name = new_name.clone();
+
+                (new_name, port)
+            } else {
+                (name, port)
+            }
+        })
+        .collect();
+
+    Ok(())
+}
+
 pub fn remove_unsafe_cpu_regs(chip: &mut chip::Chip, _el: &xmltree::Element) -> crate::Result<()> {
     if let Some(cpu) = chip.peripherals.get_mut("CPU") {
         cpu.registers.remove("SREG");
