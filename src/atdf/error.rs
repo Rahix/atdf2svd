@@ -1,15 +1,23 @@
 use crate::ElementExt;
-use colored::Colorize;
 
 pub struct UnsupportedError(String, String);
 
 impl crate::DisplayError for UnsupportedError {
     fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
+        let maybe_styled_element = {
+            cfg_if::cfg_if! {
+                if #[cfg(feature = "cli")] {
+                    use colored::Colorize;
+                    self.1.dimmed()
+                } else {
+                    &self.1
+                }
+            }
+        };
         write!(
             w,
             "{} is unsupported in element\n    {}",
-            self.0,
-            self.1.dimmed()
+            self.0, maybe_styled_element,
         )
     }
 }
