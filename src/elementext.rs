@@ -112,17 +112,25 @@ impl ElementExt for xmltree::Element {
 
 pub mod error {
     use super::ElementExt;
-    use colored::Colorize;
 
     pub struct MissingAttribute(String, String);
 
     impl crate::DisplayError for MissingAttribute {
         fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
+            let maybe_styled_element = {
+                cfg_if::cfg_if! {
+                    if #[cfg(feature = "cli")] {
+                        use colored::Colorize;
+                        self.1.dimmed()
+                    } else {
+                        &self.1
+                    }
+                }
+            };
             write!(
                 w,
                 "Missing attribute {:?} on\n   {}",
-                self.0,
-                self.1.dimmed()
+                self.0, maybe_styled_element,
             )
         }
     }
@@ -137,7 +145,21 @@ pub mod error {
 
     impl crate::DisplayError for MissingElement {
         fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()> {
-            write!(w, "Missing child {:?} in\n   {}", self.0, self.1.dimmed())
+            let maybe_styled_element = {
+                cfg_if::cfg_if! {
+                    if #[cfg(feature = "cli")] {
+                        use colored::Colorize;
+                        self.1.dimmed()
+                    } else {
+                        &self.1
+                    }
+                }
+            };
+            write!(
+                w,
+                "Missing child {:?} in\n   {}",
+                self.0, maybe_styled_element
+            )
         }
     }
 

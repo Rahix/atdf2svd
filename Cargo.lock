@@ -65,6 +65,7 @@ dependencies = [
 name = "atdf2svd"
 version = "0.5.0"
 dependencies = [
+ "cfg-if",
  "colored",
  "env_logger",
  "git-version",
@@ -75,6 +76,12 @@ dependencies = [
  "svd-rs",
  "xmltree 0.10.3",
 ]
+
+[[package]]
+name = "cfg-if"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "colorchoice"

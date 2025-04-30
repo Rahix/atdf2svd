@@ -1,5 +1,6 @@
 #[macro_use]
 pub mod error;
+#[cfg(feature = "cli")]
 pub mod cli;
 
 pub mod atdf;
@@ -10,10 +11,12 @@ pub mod util;
 
 pub use elementext::ElementExt;
 pub use error::{DisplayError, Error, Result};
+#[cfg(feature = "cli")]
 pub use gumdrop::Options;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 
+#[cfg(feature = "cli")]
 #[derive(Debug, Options)]
 /// A tool to convert AVR chip description files (.atdf) to SVD.
 pub struct Atdf2SvdOptions {
@@ -41,6 +44,7 @@ pub struct Atdf2SvdOptions {
     version: bool,
 }
 
+#[cfg(feature = "cli")]
 pub fn run(args: Atdf2SvdOptions) {
     if args.version {
         println!(
