@@ -83,8 +83,8 @@ pub fn run(args: Atdf2SvdOptions) {
 
 pub fn run_test(atdf: &mut dyn std::io::Read, auto_patches: Vec<&str>) -> String {
     let patches = HashSet::from_iter(auto_patches.iter().map(|s| s.to_string()));
-    let chip = atdf::parse(atdf, &patches).unwrap_or_else(|e| cli::panic_with_error(e));
+    let chip = atdf::parse(atdf, &patches).unwrap_or_else(|e| e.into_panic());
     let mut output = Vec::new();
-    svd::generate(&chip, &mut output).unwrap_or_else(|e| cli::panic_with_error(e));
+    svd::generate(&chip, &mut output).unwrap_or_else(|e| e.into_panic());
     String::from_utf8(output).unwrap()
 }

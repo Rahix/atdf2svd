@@ -34,9 +34,3 @@ pub fn exit_with_error(e: crate::Error) -> ! {
     writeln!(stderr).unwrap();
     std::process::exit(1);
 }
-
-pub fn panic_with_error(e: crate::Error) -> ! {
-    let mut message: Vec<u8> = "Error: ".into();
-    e.format(&mut message).unwrap();
-    panic!("{}", String::from_utf8_lossy(&message));
-}
