@@ -8,13 +8,21 @@ on:
   pull_request:
 
 jobs:
+  build:
+    name: Build and run atdf2svd CLI tool
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: cargo run -- tests/atmega328p.atdf /dev/null
+
   test:
     name: Run atdf2svd regression tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions-rust-lang/setup-rust-toolchain@v1
-      - run: cargo test
+      - run: cargo test --no-default-features
 
   rustfmt:
     name: Rustfmt
