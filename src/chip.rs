@@ -52,7 +52,7 @@ pub enum ValueRestriction {
 pub struct RegisterGroup {
     pub name: String,
     pub description: Option<String>,
-    /// Offset relative to the peripheral base address
+    /// Offset relative to the parent address
     pub offset: usize,
     /// Indicates if this register group is a union.
     ///

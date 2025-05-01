@@ -68,6 +68,7 @@ pub fn build_register_group_hierarchy(
                 let new_address = current_address + offset;
 
                 if offset > 0 {
+                    subgroup.offset = offset;
                     // Adjust each register's address by the calculated adjustment
                     subgroup.registers.iter_mut().for_each(|(_, register)| {
                         register.address = new_address + register.offset;
