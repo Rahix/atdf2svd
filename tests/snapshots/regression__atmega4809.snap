@@ -15810,7 +15810,7 @@ expression: svd
       </addressBlock>
       <registers>
         <cluster>
-          <name>TCA_SINGLE</name>
+          <name>SINGLE</name>
           <description>16-bit Timer/Counter Type A - Single Mode</description>
           <addressOffset>0x0</addressOffset>
           <register>
@@ -16439,7 +16439,7 @@ expression: svd
           </register>
         </cluster>
         <cluster>
-          <name>TCA_SPLIT</name>
+          <name>SPLIT</name>
           <description>16-bit Timer/Counter Type A - Split Mode</description>
           <addressOffset>0x0</addressOffset>
           <register>

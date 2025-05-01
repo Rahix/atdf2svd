@@ -10,21 +10,25 @@ pub fn parse_list(
     value_groups: &atdf::values::ValueGroups,
 ) -> crate::Result<BTreeMap<String, chip::RegisterGroup>> {
     let mut register_group_headers = BTreeMap::new();
-    for register_group_header_el in module_el
+    for register_group_el in module_el
         .children
         .iter()
         .filter_map(|node| node.as_element().filter(|e| e.name == "register-group"))
     {
-        let name = register_group_header_el.attr("name")?.clone();
-        let description = register_group_header_el
+        let name = register_group_el.attr("name")?.clone();
+        let description = register_group_el
             .attributes
             .get("caption")
             .filter(|d| !d.is_empty())
             .cloned();
+        let class = register_group_el
+            .attributes
+            .get("class")
+            .filter(|d| !d.is_empty())
+            .cloned();
 
-        let references = parse_references(register_group_header_el)?;
-        let registers =
-            atdf::register::parse_list(register_group_header_el, address, value_groups)?;
+        let references = parse_references(register_group_el)?;
+        let registers = atdf::register::parse_list(register_group_el, address, value_groups)?;
 
         register_group_headers.insert(
             name.clone(),
@@ -32,6 +36,7 @@ pub fn parse_list(
                 name,
                 description,
                 offset: 0,
+                is_union: class == Some("union".to_string()),
                 registers,
                 references,
                 // subgroups will be filled in when all register-groups are parsed
@@ -89,20 +94,20 @@ pub fn parse_references(
 ) -> crate::Result<Vec<chip::RegisterGroupReference>> {
     let mut register_group_references = vec![];
 
-    for register_group_item_el in register_group_el
+    for register_group_ref_el in register_group_el
         .children
         .iter()
         .filter_map(|node| node.as_element().filter(|e| e.name == "register-group"))
     {
-        let name = register_group_item_el.attr("name")?.clone();
+        let name = register_group_ref_el.attr("name")?.clone();
 
-        let name_in_module = register_group_item_el
+        let name_in_module = register_group_ref_el
             .attributes
             .get("name-in-module")
             .filter(|d| !d.is_empty())
             .cloned();
 
-        let offset = register_group_item_el
+        let offset = register_group_ref_el
             .attributes
             .get("offset")
             .filter(|d| !d.is_empty())

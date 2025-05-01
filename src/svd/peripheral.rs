@@ -5,27 +5,21 @@ use crate::svd;
 use std::convert::TryInto;
 
 fn create_address_blocks(p: &chip::Peripheral) -> crate::Result<Option<Vec<svd_rs::AddressBlock>>> {
-    let mut registers = p.register_group.get_all_registers().clone();
+    let mut registers: Vec<&chip::Register> = if p.register_group.is_union {
+        if let Some(first_subgroup) = p.register_group.subgroups.first() {
+            first_subgroup.registers.values().collect::<Vec<_>>()
+        } else {
+            log::warn!("Union peripheral {:?} has no subgroups", p.name);
+            Vec::new() // Return empty vector if there are no subgroups
+        }
+    } else {
+        p.register_group.registers.values().collect::<Vec<_>>()
+    };
     registers.sort_by(|a, b| a.address.cmp(&b.address));
 
-    let new_address_block = |offset: usize, size, reg: Option<&chip::Register>| {
-        // Calculate the offset relative to the peripheral's base address
-        // Handle the case where offset might be less than p.address
-        let offset_value = if offset >= p.address {
-            offset - p.address
-        } else {
-            let fd = if let Some(reg) = reg {
-                reg.name.clone()
-            } else {
-                "Unknown".to_string()
-            };
-            println!("cargo:warning=Register address {} ({:#x}) is less than peripheral base address ({:#x})", fd, offset, p.address);
-            0 // Default to 0 if we have an underflow situation
-        };
-        let offset = offset_value.try_into().map_err(crate::Error::from)?;
-
+    let new_address_block = |offset: usize, size| {
         svd_rs::AddressBlock::builder()
-            .offset(offset)
+            .offset(offset as u32)
             .size(size)
             .usage(svd_rs::AddressBlockUsage::Registers)
             .build(svd_rs::ValidateLevel::Strict)
@@ -33,28 +27,22 @@ fn create_address_blocks(p: &chip::Peripheral) -> crate::Result<Option<Vec<svd_r
     };
 
     let mut address_blocks = Vec::new();
-    let mut current_offset = registers[0].address;
+    let mut current_offset = registers[0].offset;
     let mut current_size = 0;
     for reg in registers.into_iter() {
         let current_address = current_offset + current_size;
-        if current_address == reg.address {
+        if current_address == reg.offset {
             current_size += reg.size;
         } else {
-            address_blocks.push(new_address_block(
-                current_offset,
-                current_size.try_into()?,
-                Some(reg),
-            )?);
+            if current_size > 0 {
+                address_blocks.push(new_address_block(current_offset, current_size.try_into()?)?);
+            }
 
-            current_offset = reg.address;
+            current_offset = reg.offset;
             current_size = reg.size;
         }
     }
-    address_blocks.push(new_address_block(
-        current_offset,
-        current_size.try_into()?,
-        None,
-    )?);
+    address_blocks.push(new_address_block(current_offset, current_size.try_into()?)?);
 
     let address_blocks = if !address_blocks.is_empty() {
         Some(address_blocks)
@@ -76,18 +64,20 @@ pub fn create_register_clusters(
         result.push(register_cluster);
     }
 
-    for subgroup in register_group.subgroups.iter() {
-        let subgroup_clusters = create_register_clusters(subgroup)?;
-        let cluster = svd_rs::RegisterCluster::Cluster(MaybeArray::Single(
-            svd_rs::ClusterInfo::builder()
-                .name(subgroup.name.clone())
-                .description(subgroup.description.clone())
-                .address_offset(subgroup.offset as u32)
-                .children(subgroup_clusters)
-                .build(svd_rs::ValidateLevel::Strict)
-                .map_err(crate::Error::from)?,
-        ));
-        result.push(cluster);
+    if register_group.is_union {
+        for subgroup in register_group.subgroups.iter() {
+            let subgroup_clusters = create_register_clusters(subgroup)?;
+            let cluster = svd_rs::RegisterCluster::Cluster(MaybeArray::Single(
+                svd_rs::ClusterInfo::builder()
+                    .name(subgroup.name.clone())
+                    .description(subgroup.description.clone())
+                    .address_offset(subgroup.offset as u32)
+                    .children(subgroup_clusters)
+                    .build(svd_rs::ValidateLevel::Strict)
+                    .map_err(crate::Error::from)?,
+            ));
+            result.push(cluster);
+        }
     }
 
     Ok(result)
