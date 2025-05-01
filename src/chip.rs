@@ -96,16 +96,6 @@ pub struct RegisterGroupReference {
 }
 
 #[derive(Debug, Clone)]
-pub struct RegisterGroupItem {
-    pub name: String,
-    pub name_in_module: Option<String>,
-    pub description: Option<String>,
-    pub size: Option<usize>,
-    pub offset: Option<usize>,
-    pub count: Option<usize>,
-}
-
-#[derive(Debug, Clone)]
 pub struct Register {
     pub name: String,
     pub description: Option<String>,
