@@ -21,54 +21,8 @@ pub struct Peripheral {
     pub name_in_module: String,
     pub description: Option<String>,
 
-    pub registers: BTreeMap<String, Register>,
-    pub register_group_headers: BTreeMap<String, RegisterGroupHeader>,
-}
-
-impl Peripheral {
-    pub fn base_address(&self) -> Option<usize> {
-        if self.is_union() {
-            return self
-                .get_union_register_group_headers()
-                .iter()
-                .flat_map(|(h, _)| h.registers.values())
-                .map(|r| r.address)
-                .min();
-        }
-        self.registers.values().map(|r| r.address).min()
-    }
-
-    pub fn module_register_group_header(&self) -> Option<&RegisterGroupHeader> {
-        self.register_group_headers.get(&self.name_in_module)
-    }
-
-    pub fn is_union(&self) -> bool {
-        let module_register_group_header = self.module_register_group_header();
-        match module_register_group_header {
-            Some(header) => header.is_union(),
-            None => false,
-        }
-    }
-
-    pub fn get_union_register_group_headers(
-        &self,
-    ) -> Vec<(&RegisterGroupHeader, &RegisterGroupItem)> {
-        match self.module_register_group_header() {
-            Some(module_header) if module_header.is_union() => module_header
-                .register_group_items
-                .values()
-                .filter_map(|group_item| {
-                    group_item.name_in_module.as_ref().and_then(|header_name| {
-                        self.register_group_headers
-                            .iter()
-                            .find(|(_, header)| &header.name == header_name)
-                            .map(|(_, header)| (header, group_item))
-                    })
-                })
-                .collect(),
-            _ => vec![],
-        }
-    }
+    pub address: usize,
+    pub register_group: RegisterGroup,
 }
 
 #[derive(Debug, Clone)]
@@ -95,20 +49,45 @@ pub enum ValueRestriction {
 }
 
 #[derive(Debug, Clone)]
-pub struct RegisterGroupHeader {
+pub struct RegisterGroup {
     pub name: String,
-    pub class: Option<String>,
     pub description: Option<String>,
-    pub size: Option<usize>,
+    /// Offset relative to the peripheral base address
+    pub offset: usize,
 
-    pub register_group_items: BTreeMap<String, RegisterGroupItem>,
+    /// The register group references to other register groups. This is only used for filling up
+    /// the subgroups.
+    pub references: Vec<RegisterGroupReference>,
+    pub subgroups: Vec<RegisterGroup>,
     pub registers: BTreeMap<String, Register>,
 }
 
-impl RegisterGroupHeader {
-    pub fn is_union(&self) -> bool {
-        self.class.as_deref() == Some("union")
+impl RegisterGroup {
+    /// Recursively collects all registers from this register group and its subgroups.
+    ///
+    /// This function traverses the register group hierarchy, including all subgroups,
+    /// and returns a collection of all registers found.
+    pub fn get_all_registers(&self) -> Vec<&Register> {
+        let mut registers = Vec::new();
+
+        // Add registers from the current group
+        registers.extend(self.registers.values());
+
+        // Recursively add registers from all subgroups
+        for subgroup in &self.subgroups {
+            registers.extend(subgroup.get_all_registers());
+        }
+
+        // Return the collected registers
+        registers
     }
+}
+
+#[derive(Debug, Clone)]
+pub struct RegisterGroupReference {
+    pub name: String,
+    pub name_in_module: Option<String>,
+    pub offset: Option<usize>,
 }
 
 #[derive(Debug, Clone)]
@@ -126,7 +105,10 @@ pub struct Register {
     pub name: String,
     pub description: Option<String>,
     pub mode: Option<String>,
+    /// The absolute memory address where this register is located in the memory map
     pub address: usize,
+    /// The relative offset of this register within its parent register group
+    pub offset: usize,
     pub size: usize,
     pub access: AccessMode,
     pub restriction: ValueRestriction,

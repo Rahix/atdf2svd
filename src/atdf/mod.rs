@@ -7,6 +7,7 @@ pub mod interrupt;
 pub mod patch;
 pub mod peripheral;
 pub mod register;
+pub mod register_group;
 pub mod values;
 
 pub fn parse<R: std::io::Read>(

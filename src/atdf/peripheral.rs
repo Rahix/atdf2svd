@@ -26,11 +26,16 @@ pub fn parse_list(
                 Err(_) => continue,
             };
             let name_in_module = instance_register_group.attr("name-in-module")?;
-            let offset = util::parse_int(instance_register_group.attr("offset")?)?;
-            let register_group_headers =
-                atdf::register::parse_register_group_headers(module, offset, &value_groups)?;
-            let main_register_group = register_group_headers.get(name_in_module).cloned().unwrap();
-            let registers = main_register_group.registers;
+            let address = util::parse_int(instance_register_group.attr("offset")?)?;
+
+            let mut register_groups = atdf::register_group::parse_list(module, 0, &value_groups)?;
+            let mut main_register_group = register_groups.get(name_in_module).cloned().unwrap();
+            atdf::register_group::build_register_group_hierarchy(
+                &mut main_register_group,
+                &mut register_groups,
+                address,
+                0,
+            )?;
 
             peripherals.push(chip::Peripheral {
                 name: instance.attr("name")?.clone(),
@@ -41,8 +46,8 @@ pub fn parse_list(
                     .ok()
                     .cloned()
                     .and_then(|d| if !d.is_empty() { Some(d) } else { None }),
-                registers,
-                register_group_headers: register_group_headers.clone(),
+                address,
+                register_group: main_register_group,
             })
         }
     }
