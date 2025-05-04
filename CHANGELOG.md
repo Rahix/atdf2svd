@@ -5,8 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added a default-enabled `cli` feature which can be disabled by library-users
+  of this crate to reduce dependency bloat ([#81]).
+
 ### Changed
 - Updated dependencies
+
+[#81]: https://github.com/Rahix/atdf2svd/pull/81
 
 
 ## [0.5.0] - 2024-11-05
