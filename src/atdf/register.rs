@@ -19,7 +19,7 @@ fn field_map_from_bitfield_children(
 
 pub fn parse(
     el: &xmltree::Element,
-    offset: usize,
+    address: usize,
     values: &atdf::values::ValueGroups,
 ) -> crate::Result<chip::Register> {
     let name = el.attr("name")?.clone();
@@ -69,11 +69,14 @@ pub fn parse(
             crate::Result::Ok(())
         })?;
 
+    let offset = util::parse_int(el.attr("offset")?)?;
+
     Ok(chip::Register {
         name,
         description,
         mode,
-        address: util::parse_int(el.attr("offset")?)? + offset,
+        address: address + offset,
+        offset,
         size: util::parse_int(el.attr("size")?)?,
         access,
         restriction: if fields.is_empty() {
@@ -83,4 +86,23 @@ pub fn parse(
         },
         fields,
     })
+}
+
+pub fn parse_list(
+    register_group_el: &xmltree::Element,
+    offset: usize,
+    value_groups: &atdf::values::ValueGroups,
+) -> crate::Result<BTreeMap<String, chip::Register>> {
+    register_group_el
+        .iter_children_with_name("register", Some("register-group"))
+        .map(|reg| {
+            atdf::register::parse(reg, offset, value_groups).map(|r| {
+                let key = match r.mode {
+                    Some(ref mode) => format!("{mode}_{}", r.name),
+                    None => r.name.clone(),
+                };
+                (key, r)
+            })
+        })
+        .collect()
 }

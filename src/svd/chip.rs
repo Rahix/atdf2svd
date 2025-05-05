@@ -45,7 +45,7 @@ pub fn generate(c: &chip::Chip) -> crate::Result<svd_rs::Device> {
 }
 
 fn has_registers(peripheral: &&chip::Peripheral) -> bool {
-    let regs = !peripheral.registers.is_empty();
+    let regs = !peripheral.register_group.get_all_registers().is_empty();
     if !regs {
         log::warn!("No registers found for peripheral {}", peripheral.name);
     }
