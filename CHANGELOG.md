@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added a new option `-o` / `--ocd-access` that directs to use the `ocd-rw` attribute instead of the `rw` attribute in order to determine the access property of a register. It is needed to generate SVD files suitable for a debugger. See also ([#24]).
+
 
 ## [0.5.1] - 2025-05-04
 ### Added
