@@ -12,10 +12,11 @@ pub mod values;
 pub fn parse<R: std::io::Read>(
     r: R,
     patches: &HashSet<String>,
+    ocdaccess: bool,
 ) -> crate::Result<crate::chip::Chip> {
     let tree = xmltree::Element::parse(r)?;
 
-    let mut chip = chip::parse(&tree)?;
+    let mut chip = chip::parse(&tree, ocdaccess)?;
 
     patch::signals_to_port_fields(&mut chip, &tree)
         .unwrap_or_else(|_| log::warn!("Could not apply 'signals_to_port_fields' patch!"));

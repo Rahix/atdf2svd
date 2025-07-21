@@ -6,6 +6,7 @@ use crate::ElementExt;
 pub fn parse_list(
     el: &xmltree::Element,
     modules: &xmltree::Element,
+    ocdaccess: bool,
 ) -> crate::Result<Vec<chip::Peripheral>> {
     let mut peripherals = vec![];
 
@@ -33,7 +34,7 @@ pub fn parse_list(
                 let group = module.first_child_by_attr(Some("register-group"), "name", name)?;
 
                 for register in group.iter_children_with_name("register", Some("register-group")) {
-                    registers.push(atdf::register::parse(register, offset, &value_groups)?);
+                    registers.push(atdf::register::parse(register, offset, &value_groups, ocdaccess)?);
                 }
             }
 

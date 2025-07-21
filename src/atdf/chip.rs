@@ -3,7 +3,7 @@ use crate::chip;
 use crate::ElementExt;
 use std::collections::BTreeMap;
 
-pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {
+pub fn parse(el: &xmltree::Element, ocdaccess: bool) -> crate::Result<chip::Chip> {
     let devices = el.first_child("devices")?;
     if devices.children.len() != 1 {
         return Err(
@@ -16,6 +16,7 @@ pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {
     let peripherals = atdf::peripheral::parse_list(
         device.first_child("peripherals")?,
         el.first_child("modules")?,
+	ocdaccess,
     )?
     .into_iter()
     .map(|p| (p.name.clone(), p))
