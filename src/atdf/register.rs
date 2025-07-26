@@ -43,11 +43,13 @@ pub fn parse(
             "R" => chip::AccessMode::ReadOnly,
             "W" => chip::AccessMode::WriteOnly,
             "RW" => chip::AccessMode::ReadWrite,
-            "" => if ocdaccess {
-	       	     chip::AccessMode::WriteOnly
-		     } else {
-		     chip::AccessMode::NoAccess
-		     },
+            "" => {
+                if ocdaccess {
+                    chip::AccessMode::WriteOnly
+                } else {
+                    chip::AccessMode::NoAccess
+                }
+            }
             _ => chip::AccessMode::ReadWrite,
         }
     } else {

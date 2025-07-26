@@ -16,7 +16,7 @@ pub fn parse(el: &xmltree::Element, ocdaccess: bool) -> crate::Result<chip::Chip
     let peripherals = atdf::peripheral::parse_list(
         device.first_child("peripherals")?,
         el.first_child("modules")?,
-	ocdaccess,
+        ocdaccess,
     )?
     .into_iter()
     .map(|p| (p.name.clone(), p))

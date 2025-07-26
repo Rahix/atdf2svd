@@ -79,7 +79,8 @@ pub fn run(args: Atdf2SvdOptions) {
     };
 
     let patches = HashSet::from_iter(args.auto_patches.iter().cloned());
-    let chip = atdf::parse(atdf_file, &patches, args.ocdaccess).unwrap_or_else(|e| cli::exit_with_error(e));
+    let chip = atdf::parse(atdf_file, &patches, args.ocdaccess)
+        .unwrap_or_else(|e| cli::exit_with_error(e));
 
     if args.debug {
         eprintln!("{:#?}", chip);
