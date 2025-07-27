@@ -36,6 +36,9 @@ fn atmega4809() {
 #[test]
 fn atmega328p_unsafe_nofuse() {
     let mut atdf = std::fs::File::open("tests/atmega328p.atdf").unwrap();
-    let svd = atdf2svd::run_test(&mut atdf, vec!["keep_unsafe_cpu_registers", "remove_fuse_and_lockbit"]);
+    let svd = atdf2svd::run_test(
+        &mut atdf,
+        vec!["keep_unsafe_cpu_registers", "remove_fuse_and_lockbit"],
+    );
     insta::assert_snapshot!(svd);
 }
