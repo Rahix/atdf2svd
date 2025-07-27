@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added the `keep_unsafe_cpu_registers` auto-patch which disables the removal
+  of the `SP` and `SREG` registers ([#82]).  This is useful for generating SVD
+  files for hardware debuggers.
+- Added the `remove_fuse_and_lockbit` auto-patch which removes the `FUSE` and
+  `LOCKBIT` peripherals entirely ([#82]).  Again useful for hardware debuggers.
+
+[#82]: https://github.com/Rahix/atdf2svd/pull/82
+
 
 ## [0.5.1] - 2025-05-04
 ### Added
