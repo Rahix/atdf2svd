@@ -64,6 +64,12 @@ pub fn remove_unsafe_cpu_regs(chip: &mut chip::Chip, _el: &xmltree::Element) -> 
     Ok(())
 }
 
+pub fn remove_fuse_and_lockbit(chip: &mut chip::Chip, _el: &xmltree::Element) -> crate::Result<()> {
+    chip.peripherals.remove("LOCKBIT");
+    chip.peripherals.remove("FUSE");
+    Ok(())
+}
+
 fn longest_common_prefix<'a>(strings: &[&'a str]) -> &'a str {
     if strings.is_empty() {
         return "";
