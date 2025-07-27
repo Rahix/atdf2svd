@@ -20,7 +20,7 @@ pub fn parse<R: std::io::Read>(
     patch::signals_to_port_fields(&mut chip, &tree)
         .unwrap_or_else(|_| log::warn!("Could not apply 'signals_to_port_fields' patch!"));
 
-    if !patches.contains("add_unsafe_cpu_registers") {
+    if !patches.contains("keep_unsafe_cpu_registers") {
         patch::remove_unsafe_cpu_regs(&mut chip, &tree)?;
     }
 

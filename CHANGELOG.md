@@ -6,12 +6,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Added two new optional patches in order to support the generation of
-SVD files that can be used in the context of a debugger:
-  - With `--auto-patches add_unsafe_cpu_registers` one can disable the
-  automatic removal of `SP` and `SREG`.
-  - With `--auto-patches remove_fuse_and_lockbit` the FUSE and LOCKBIT
-    peripherals are removed.
 
 ## [0.5.1] - 2025-05-04
 ### Added
