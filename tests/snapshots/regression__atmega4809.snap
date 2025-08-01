@@ -15775,6 +15775,1151 @@ expression: svd
       </registers>
     </peripheral>
     <peripheral>
+      <name>TCA0</name>
+      <description>16-bit Timer/Counter Type A</description>
+      <baseAddress>0x00000A00</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x8</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <addressBlock>
+        <offset>0x9</offset>
+        <size>0x3</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <addressBlock>
+        <offset>0xE</offset>
+        <size>0x2</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <addressBlock>
+        <offset>0x20</offset>
+        <size>0x2</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <addressBlock>
+        <offset>0x26</offset>
+        <size>0x8</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <addressBlock>
+        <offset>0x36</offset>
+        <size>0x8</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers>
+        <cluster>
+          <name>SINGLE</name>
+          <description>16-bit Timer/Counter Type A - Single Mode</description>
+          <addressOffset>0x0</addressOffset>
+          <register>
+            <name>CMP0</name>
+            <description>Compare 0</description>
+            <addressOffset>0x28</addressOffset>
+            <size>0x10</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>65535</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>CMP0BUF</name>
+            <description>Compare 0 Buffer</description>
+            <addressOffset>0x38</addressOffset>
+            <size>0x10</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>65535</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>CMP1</name>
+            <description>Compare 1</description>
+            <addressOffset>0x2A</addressOffset>
+            <size>0x10</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>65535</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>CMP1BUF</name>
+            <description>Compare 1 Buffer</description>
+            <addressOffset>0x3A</addressOffset>
+            <size>0x10</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>65535</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>CMP2</name>
+            <description>Compare 2</description>
+            <addressOffset>0x2C</addressOffset>
+            <size>0x10</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>65535</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>CMP2BUF</name>
+            <description>Compare 2 Buffer</description>
+            <addressOffset>0x3C</addressOffset>
+            <size>0x10</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>65535</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>CNT</name>
+            <description>Count</description>
+            <addressOffset>0x20</addressOffset>
+            <size>0x10</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>65535</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>CTRLA</name>
+            <description>Control A</description>
+            <addressOffset>0x0</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>ENABLE</name>
+                <description>Module Enable</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CLKSEL</name>
+                <description>Clock Selection</description>
+                <bitRange>[3:1]</bitRange>
+                <access>read-write</access>
+                <writeConstraint>
+                  <useEnumeratedValues>true</useEnumeratedValues>
+                </writeConstraint>
+                <enumeratedValues>
+                  <enumeratedValue>
+                    <name>DIV1</name>
+                    <description>System Clock</description>
+                    <value>0</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV2</name>
+                    <description>System Clock / 2</description>
+                    <value>1</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV4</name>
+                    <description>System Clock / 4</description>
+                    <value>2</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV8</name>
+                    <description>System Clock / 8</description>
+                    <value>3</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV16</name>
+                    <description>System Clock / 16</description>
+                    <value>4</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV64</name>
+                    <description>System Clock / 64</description>
+                    <value>5</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV256</name>
+                    <description>System Clock / 256</description>
+                    <value>6</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV1024</name>
+                    <description>System Clock / 1024</description>
+                    <value>7</value>
+                  </enumeratedValue>
+                </enumeratedValues>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLB</name>
+            <description>Control B</description>
+            <addressOffset>0x1</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>WGMODE</name>
+                <description>Waveform generation mode</description>
+                <bitRange>[2:0]</bitRange>
+                <access>read-write</access>
+                <writeConstraint>
+                  <useEnumeratedValues>true</useEnumeratedValues>
+                </writeConstraint>
+                <enumeratedValues>
+                  <enumeratedValue>
+                    <name>NORMAL</name>
+                    <description>Normal Mode</description>
+                    <value>0</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>FRQ</name>
+                    <description>Frequency Generation Mode</description>
+                    <value>1</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>SINGLESLOPE</name>
+                    <description>Single Slope PWM</description>
+                    <value>3</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DSTOP</name>
+                    <description>Dual Slope PWM, overflow on TOP</description>
+                    <value>5</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DSBOTH</name>
+                    <description>Dual Slope PWM, overflow on TOP and BOTTOM</description>
+                    <value>6</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DSBOTTOM</name>
+                    <description>Dual Slope PWM, overflow on BOTTOM</description>
+                    <value>7</value>
+                  </enumeratedValue>
+                </enumeratedValues>
+              </field>
+              <field>
+                <name>ALUPD</name>
+                <description>Auto Lock Update</description>
+                <bitRange>[3:3]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP0EN</name>
+                <description>Compare 0 Enable</description>
+                <bitRange>[4:4]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP1EN</name>
+                <description>Compare 1 Enable</description>
+                <bitRange>[5:5]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP2EN</name>
+                <description>Compare 2 Enable</description>
+                <bitRange>[6:6]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLC</name>
+            <description>Control C</description>
+            <addressOffset>0x2</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>CMP0OV</name>
+                <description>Compare 0 Waveform Output Value</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP1OV</name>
+                <description>Compare 1 Waveform Output Value</description>
+                <bitRange>[1:1]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP2OV</name>
+                <description>Compare 2 Waveform Output Value</description>
+                <bitRange>[2:2]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLD</name>
+            <description>Control D</description>
+            <addressOffset>0x3</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>SPLITM</name>
+                <description>Split Mode Enable</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLECLR</name>
+            <description>Control E Clear</description>
+            <addressOffset>0x4</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>DIR</name>
+                <description>Direction</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LUPD</name>
+                <description>Lock Update</description>
+                <bitRange>[1:1]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMD</name>
+                <description>Command</description>
+                <bitRange>[3:2]</bitRange>
+                <access>read-write</access>
+                <writeConstraint>
+                  <useEnumeratedValues>true</useEnumeratedValues>
+                </writeConstraint>
+                <enumeratedValues>
+                  <enumeratedValue>
+                    <name>NONE</name>
+                    <description>No Command</description>
+                    <value>0</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>UPDATE</name>
+                    <description>Force Update</description>
+                    <value>1</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>RESTART</name>
+                    <description>Force Restart</description>
+                    <value>2</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>RESET</name>
+                    <description>Force Hard Reset</description>
+                    <value>3</value>
+                  </enumeratedValue>
+                </enumeratedValues>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLESET</name>
+            <description>Control E Set</description>
+            <addressOffset>0x5</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>DIR</name>
+                <description>Direction</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+                <writeConstraint>
+                  <useEnumeratedValues>true</useEnumeratedValues>
+                </writeConstraint>
+                <enumeratedValues>
+                  <enumeratedValue>
+                    <name>UP</name>
+                    <description>Count up</description>
+                    <value>0</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DOWN</name>
+                    <description>Count down</description>
+                    <value>1</value>
+                  </enumeratedValue>
+                </enumeratedValues>
+              </field>
+              <field>
+                <name>LUPD</name>
+                <description>Lock Update</description>
+                <bitRange>[1:1]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMD</name>
+                <description>Command</description>
+                <bitRange>[3:2]</bitRange>
+                <access>read-write</access>
+                <writeConstraint>
+                  <useEnumeratedValues>true</useEnumeratedValues>
+                </writeConstraint>
+                <enumeratedValues>
+                  <enumeratedValue>
+                    <name>NONE</name>
+                    <description>No Command</description>
+                    <value>0</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>UPDATE</name>
+                    <description>Force Update</description>
+                    <value>1</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>RESTART</name>
+                    <description>Force Restart</description>
+                    <value>2</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>RESET</name>
+                    <description>Force Hard Reset</description>
+                    <value>3</value>
+                  </enumeratedValue>
+                </enumeratedValues>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLFCLR</name>
+            <description>Control F Clear</description>
+            <addressOffset>0x6</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>PERBV</name>
+                <description>Period Buffer Valid</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP0BV</name>
+                <description>Compare 0 Buffer Valid</description>
+                <bitRange>[1:1]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP1BV</name>
+                <description>Compare 1 Buffer Valid</description>
+                <bitRange>[2:2]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP2BV</name>
+                <description>Compare 2 Buffer Valid</description>
+                <bitRange>[3:3]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLFSET</name>
+            <description>Control F Set</description>
+            <addressOffset>0x7</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>PERBV</name>
+                <description>Period Buffer Valid</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP0BV</name>
+                <description>Compare 0 Buffer Valid</description>
+                <bitRange>[1:1]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP1BV</name>
+                <description>Compare 1 Buffer Valid</description>
+                <bitRange>[2:2]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP2BV</name>
+                <description>Compare 2 Buffer Valid</description>
+                <bitRange>[3:3]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>DBGCTRL</name>
+            <description>Degbug Control</description>
+            <addressOffset>0xE</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>DBGRUN</name>
+                <description>Debug Run</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>EVCTRL</name>
+            <description>Event Control</description>
+            <addressOffset>0x9</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>CNTEI</name>
+                <description>Count on Event Input</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>EVACT</name>
+                <description>Event Action</description>
+                <bitRange>[2:1]</bitRange>
+                <access>read-write</access>
+                <writeConstraint>
+                  <useEnumeratedValues>true</useEnumeratedValues>
+                </writeConstraint>
+                <enumeratedValues>
+                  <enumeratedValue>
+                    <name>POSEDGE</name>
+                    <description>Count on positive edge event</description>
+                    <value>0</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>ANYEDGE</name>
+                    <description>Count on any edge event</description>
+                    <value>1</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>HIGHLVL</name>
+                    <description>Count on prescaled clock while event line is 1.</description>
+                    <value>2</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>UPDOWN</name>
+                    <description>Count on prescaled clock. Event controls count direction. Up-count when event line is 0, down-count when event line is 1.</description>
+                    <value>3</value>
+                  </enumeratedValue>
+                </enumeratedValues>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>INTCTRL</name>
+            <description>Interrupt Control</description>
+            <addressOffset>0xA</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>OVF</name>
+                <description>Overflow Interrupt</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP0</name>
+                <description>Compare 0 Interrupt</description>
+                <bitRange>[4:4]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP1</name>
+                <description>Compare 1 Interrupt</description>
+                <bitRange>[5:5]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP2</name>
+                <description>Compare 2 Interrupt</description>
+                <bitRange>[6:6]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>INTFLAGS</name>
+            <description>Interrupt Flags</description>
+            <addressOffset>0xB</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>OVF</name>
+                <description>Overflow Interrupt</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP0</name>
+                <description>Compare 0 Interrupt</description>
+                <bitRange>[4:4]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP1</name>
+                <description>Compare 1 Interrupt</description>
+                <bitRange>[5:5]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CMP2</name>
+                <description>Compare 2 Interrupt</description>
+                <bitRange>[6:6]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>PER</name>
+            <description>Period</description>
+            <addressOffset>0x26</addressOffset>
+            <size>0x10</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>65535</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>PERBUF</name>
+            <description>Period Buffer</description>
+            <addressOffset>0x36</addressOffset>
+            <size>0x10</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>65535</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>TEMP</name>
+            <description>Temporary data for 16-bit Access</description>
+            <addressOffset>0xF</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+        </cluster>
+        <cluster>
+          <name>SPLIT</name>
+          <description>16-bit Timer/Counter Type A - Split Mode</description>
+          <addressOffset>0x0</addressOffset>
+          <register>
+            <name>CTRLA</name>
+            <description>Control A</description>
+            <addressOffset>0x0</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>ENABLE</name>
+                <description>Module Enable</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>CLKSEL</name>
+                <description>Clock Selection</description>
+                <bitRange>[3:1]</bitRange>
+                <access>read-write</access>
+                <writeConstraint>
+                  <useEnumeratedValues>true</useEnumeratedValues>
+                </writeConstraint>
+                <enumeratedValues>
+                  <enumeratedValue>
+                    <name>DIV1</name>
+                    <description>System Clock</description>
+                    <value>0</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV2</name>
+                    <description>System Clock / 2</description>
+                    <value>1</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV4</name>
+                    <description>System Clock / 4</description>
+                    <value>2</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV8</name>
+                    <description>System Clock / 8</description>
+                    <value>3</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV16</name>
+                    <description>System Clock / 16</description>
+                    <value>4</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV64</name>
+                    <description>System Clock / 64</description>
+                    <value>5</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV256</name>
+                    <description>System Clock / 256</description>
+                    <value>6</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>DIV1024</name>
+                    <description>System Clock / 1024</description>
+                    <value>7</value>
+                  </enumeratedValue>
+                </enumeratedValues>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLB</name>
+            <description>Control B</description>
+            <addressOffset>0x1</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>LCMP0EN</name>
+                <description>Low Compare 0 Enable</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LCMP1EN</name>
+                <description>Low Compare 1 Enable</description>
+                <bitRange>[1:1]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LCMP2EN</name>
+                <description>Low Compare 2 Enable</description>
+                <bitRange>[2:2]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>HCMP0EN</name>
+                <description>High Compare 0 Enable</description>
+                <bitRange>[4:4]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>HCMP1EN</name>
+                <description>High Compare 1 Enable</description>
+                <bitRange>[5:5]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>HCMP2EN</name>
+                <description>High Compare 2 Enable</description>
+                <bitRange>[6:6]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLC</name>
+            <description>Control C</description>
+            <addressOffset>0x2</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>LCMP0OV</name>
+                <description>Low Compare 0 Output Value</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LCMP1OV</name>
+                <description>Low Compare 1 Output Value</description>
+                <bitRange>[1:1]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LCMP2OV</name>
+                <description>Low Compare 2 Output Value</description>
+                <bitRange>[2:2]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>HCMP0OV</name>
+                <description>High Compare 0 Output Value</description>
+                <bitRange>[4:4]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>HCMP1OV</name>
+                <description>High Compare 1 Output Value</description>
+                <bitRange>[5:5]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>HCMP2OV</name>
+                <description>High Compare 2 Output Value</description>
+                <bitRange>[6:6]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLD</name>
+            <description>Control D</description>
+            <addressOffset>0x3</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>SPLITM</name>
+                <description>Split Mode Enable</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLECLR</name>
+            <description>Control E Clear</description>
+            <addressOffset>0x4</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>CMD</name>
+                <description>Command</description>
+                <bitRange>[3:2]</bitRange>
+                <access>read-write</access>
+                <writeConstraint>
+                  <useEnumeratedValues>true</useEnumeratedValues>
+                </writeConstraint>
+                <enumeratedValues>
+                  <enumeratedValue>
+                    <name>NONE</name>
+                    <description>No Command</description>
+                    <value>0</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>UPDATE</name>
+                    <description>Force Update</description>
+                    <value>1</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>RESTART</name>
+                    <description>Force Restart</description>
+                    <value>2</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>RESET</name>
+                    <description>Force Hard Reset</description>
+                    <value>3</value>
+                  </enumeratedValue>
+                </enumeratedValues>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>CTRLESET</name>
+            <description>Control E Set</description>
+            <addressOffset>0x5</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>CMD</name>
+                <description>Command</description>
+                <bitRange>[3:2]</bitRange>
+                <access>read-write</access>
+                <writeConstraint>
+                  <useEnumeratedValues>true</useEnumeratedValues>
+                </writeConstraint>
+                <enumeratedValues>
+                  <enumeratedValue>
+                    <name>NONE</name>
+                    <description>No Command</description>
+                    <value>0</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>UPDATE</name>
+                    <description>Force Update</description>
+                    <value>1</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>RESTART</name>
+                    <description>Force Restart</description>
+                    <value>2</value>
+                  </enumeratedValue>
+                  <enumeratedValue>
+                    <name>RESET</name>
+                    <description>Force Hard Reset</description>
+                    <value>3</value>
+                  </enumeratedValue>
+                </enumeratedValues>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>DBGCTRL</name>
+            <description>Degbug Control</description>
+            <addressOffset>0xE</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>DBGRUN</name>
+                <description>Debug Run</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>HCMP0</name>
+            <description>High Compare</description>
+            <addressOffset>0x29</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>HCMP1</name>
+            <description>High Compare</description>
+            <addressOffset>0x2B</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>HCMP2</name>
+            <description>High Compare</description>
+            <addressOffset>0x2D</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>HCNT</name>
+            <description>High Count</description>
+            <addressOffset>0x21</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>HPER</name>
+            <description>High Period</description>
+            <addressOffset>0x27</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>INTCTRL</name>
+            <description>Interrupt Control</description>
+            <addressOffset>0xA</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>LUNF</name>
+                <description>Low Underflow Interrupt Enable</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>HUNF</name>
+                <description>High Underflow Interrupt Enable</description>
+                <bitRange>[1:1]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LCMP0</name>
+                <description>Low Compare 0 Interrupt Enable</description>
+                <bitRange>[4:4]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LCMP1</name>
+                <description>Low Compare 1 Interrupt Enable</description>
+                <bitRange>[5:5]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LCMP2</name>
+                <description>Low Compare 2 Interrupt Enable</description>
+                <bitRange>[6:6]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>INTFLAGS</name>
+            <description>Interrupt Flags</description>
+            <addressOffset>0xB</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <fields>
+              <field>
+                <name>LUNF</name>
+                <description>Low Underflow Interrupt Flag</description>
+                <bitRange>[0:0]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>HUNF</name>
+                <description>High Underflow Interrupt Flag</description>
+                <bitRange>[1:1]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LCMP0</name>
+                <description>Low Compare 2 Interrupt Flag</description>
+                <bitRange>[4:4]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LCMP1</name>
+                <description>Low Compare 1 Interrupt Flag</description>
+                <bitRange>[5:5]</bitRange>
+                <access>read-write</access>
+              </field>
+              <field>
+                <name>LCMP2</name>
+                <description>Low Compare 0 Interrupt Flag</description>
+                <bitRange>[6:6]</bitRange>
+                <access>read-write</access>
+              </field>
+            </fields>
+          </register>
+          <register>
+            <name>LCMP0</name>
+            <description>Low Compare</description>
+            <addressOffset>0x28</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>LCMP1</name>
+            <description>Low Compare</description>
+            <addressOffset>0x2A</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>LCMP2</name>
+            <description>Low Compare</description>
+            <addressOffset>0x2C</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>LCNT</name>
+            <description>Low Count</description>
+            <addressOffset>0x20</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+          <register>
+            <name>LPER</name>
+            <description>Low Period</description>
+            <addressOffset>0x26</addressOffset>
+            <size>0x8</size>
+            <access>read-write</access>
+            <writeConstraint>
+              <range>
+                <minimum>0</minimum>
+                <maximum>255</maximum>
+              </range>
+            </writeConstraint>
+          </register>
+        </cluster>
+      </registers>
+    </peripheral>
+    <peripheral>
       <name>TCB0</name>
       <description>16-bit Timer Type B</description>
       <baseAddress>0x00000A80</baseAddress>

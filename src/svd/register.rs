@@ -1,7 +1,7 @@
 use crate::chip;
 use crate::svd::restriction::generate_access;
 
-pub fn generate(r: &chip::Register, base: u32) -> crate::Result<svd_rs::Register> {
+pub fn generate(r: &chip::Register) -> crate::Result<svd_rs::Register> {
     let (write_constraint, _) =
         crate::svd::restriction::generate(&r.restriction, r.size as u32 * 8)?;
 
@@ -11,7 +11,7 @@ pub fn generate(r: &chip::Register, base: u32) -> crate::Result<svd_rs::Register
             log::warn!("Description missing for register \"{}\"", r.name);
             Some("No Description.".to_owned())
         }))
-        .address_offset(r.address as u32 - base)
+        .address_offset(r.offset as u32)
         .size(if r.size != 0 {
             Some(r.size as u32 * 8)
         } else {
