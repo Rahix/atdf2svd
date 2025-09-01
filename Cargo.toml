@@ -37,7 +37,7 @@ svd-encoder = "0.14.2"
 cfg-if = "1.0.0"
 
 [dev-dependencies]
-insta = { version = "1.41.1", features = ["yaml"] }
+insta = { version = "1.43.1", features = ["yaml"] }
 
 [profile.test.package.insta]
 opt-level = 3
