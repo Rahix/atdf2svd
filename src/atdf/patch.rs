@@ -44,7 +44,7 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
             .map(|f| (f.name.clone(), f))
             .collect();
 
-        for reg in port.registers.values_mut() {
+        for reg in port.register_group.registers.values_mut() {
             if reg.name.ends_with(name) || NEW_PORT_REGS.iter().any(|r| r == &reg.name) {
                 reg.fields = fields.clone();
                 // Ensure that direct access to the register is unsafe
@@ -57,8 +57,8 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
 
 pub fn remove_unsafe_cpu_regs(chip: &mut chip::Chip, _el: &xmltree::Element) -> crate::Result<()> {
     if let Some(cpu) = chip.peripherals.get_mut("CPU") {
-        cpu.registers.remove("SREG");
-        cpu.registers.remove("SP");
+        cpu.register_group.registers.remove("SREG");
+        cpu.register_group.registers.remove("SP");
     }
 
     Ok(())
@@ -94,16 +94,21 @@ pub fn remove_register_common_prefix(chip: &mut chip::Chip) -> crate::Result<()>
     for peripheral in chip.peripherals.values_mut() {
         // There's not enough quorum in less than two elements to find a
         // prefix.
-        if peripheral.registers.len() < 2 {
+        if peripheral.register_group.registers.len() < 2 {
             continue;
         }
 
-        let register_names: Vec<_> = peripheral.registers.keys().map(String::as_str).collect();
+        let register_names: Vec<_> = peripheral
+            .register_group
+            .registers
+            .keys()
+            .map(String::as_str)
+            .collect();
         let common_prefix = longest_common_prefix(&register_names).to_string();
 
         let is_valid_prefix = common_prefix.ends_with("_") && common_prefix.chars().count() >= 2;
         if is_valid_prefix {
-            for register in peripheral.registers.values_mut() {
+            for register in peripheral.register_group.registers.values_mut() {
                 if let Some(s) = register.name.strip_prefix(&common_prefix) {
                     log::debug!(
                         "[remove_register_common_prefix] Renaming {} to {}",
