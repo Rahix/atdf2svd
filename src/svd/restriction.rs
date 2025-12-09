@@ -27,13 +27,13 @@ pub fn generate(
             },
             vec![],
         ),
-        chip::ValueRestriction::Range(ref lo, ref hi) => (
+        chip::ValueRestriction::Range(lo, hi) => (
             Some(svd_rs::WriteConstraint::Range(
                 svd_rs::WriteConstraintRange { min: *lo, max: *hi },
             )),
             vec![],
         ),
-        chip::ValueRestriction::Enumerated(ref v) => {
+        chip::ValueRestriction::Enumerated(v) => {
             let mut values = v.values().collect::<Vec<_>>();
             values.sort_by(|a, b| a.value.cmp(&b.value));
 

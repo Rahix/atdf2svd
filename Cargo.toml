@@ -10,7 +10,7 @@ homepage = "https://github.com/Rahix/atdf2svd"
 repository = "https://github.com/Rahix/atdf2svd"
 keywords = ["atdf", "svd", "avr", "svd2rust"]
 categories = ["command-line-utilities", "embedded"]
-edition = "2018"
+edition = "2024"
 
 exclude = [
     "tests/",
