@@ -20,7 +20,7 @@ pub fn signals_to_port_fields(chip: &mut chip::Chip, tree: &xmltree::Element) ->
         .values_mut()
         .filter(|p| p.name.starts_with("PORT") && p.name.len() == 5)
     {
-        let name = port.name.chars().rev().next().unwrap();
+        let name = port.name.chars().next_back().unwrap();
 
         let pins: Vec<_> = port_module
             .first_child_by_attr(Some("instance"), "name", &port.name)?

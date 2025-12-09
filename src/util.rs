@@ -1,6 +1,7 @@
 use std::mem;
 
 /// Parse an integer from either decimal or hexadecimal
+#[expect(clippy::from_str_radix_10)]
 pub fn parse_int(s: &str) -> crate::Result<usize> {
     if let Some(hex) = s.strip_prefix("0x") {
         usize::from_str_radix(hex, 16)

@@ -7,10 +7,8 @@ fn create_address_blocks(p: &chip::Peripheral) -> crate::Result<Option<Vec<svd_r
     registers.sort_by(|a, b| a.address.cmp(&b.address));
 
     let base = p.base_address().expect("no base address");
-    let new_address_block = |offset, size| {
-        let offset = (offset as usize - base)
-            .try_into()
-            .map_err(crate::Error::from)?;
+    let new_address_block = |offset: usize, size| {
+        let offset = (offset - base).try_into().map_err(crate::Error::from)?;
 
         svd_rs::AddressBlock::builder()
             .offset(offset)
