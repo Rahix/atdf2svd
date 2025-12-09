@@ -1,5 +1,5 @@
-use crate::chip;
 use crate::DisplayError;
+use crate::chip;
 use std::convert::TryInto;
 
 pub fn generate(peripherals: &mut [svd_rs::Peripheral], c: &chip::Chip) -> crate::Result<()> {

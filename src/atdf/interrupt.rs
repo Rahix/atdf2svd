@@ -1,6 +1,6 @@
+use crate::ElementExt;
 use crate::chip;
 use crate::util;
-use crate::ElementExt;
 
 pub fn parse(interrupt: &xmltree::Element) -> crate::Result<chip::Interrupt> {
     debug_assert!(interrupt.name == "interrupt");

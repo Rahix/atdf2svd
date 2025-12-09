@@ -1,6 +1,6 @@
+use crate::ElementExt;
 use crate::chip;
 use crate::util;
-use crate::ElementExt;
 use std::collections::BTreeMap;
 
 pub type ValueGroups = BTreeMap<String, BTreeMap<String, chip::EnumeratedValue>>;
