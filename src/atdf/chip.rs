@@ -1,6 +1,6 @@
+use crate::ElementExt;
 use crate::atdf;
 use crate::chip;
-use crate::ElementExt;
 use std::collections::BTreeMap;
 
 pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {

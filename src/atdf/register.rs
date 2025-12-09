@@ -1,7 +1,7 @@
+use crate::ElementExt;
 use crate::atdf;
 use crate::chip;
 use crate::util;
-use crate::ElementExt;
 use std::collections::BTreeMap;
 
 fn field_map_from_bitfield_children(

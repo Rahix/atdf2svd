@@ -1,7 +1,7 @@
 //! Patches for atdf files that can generally be applied
+use crate::ElementExt;
 use crate::chip;
 use crate::util;
-use crate::ElementExt;
 use std::collections::BTreeMap;
 
 const NEW_PORT_REGS: [&str; 10] = [

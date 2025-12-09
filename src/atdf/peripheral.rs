@@ -1,7 +1,7 @@
+use crate::ElementExt;
 use crate::atdf;
 use crate::chip;
 use crate::util;
-use crate::ElementExt;
 
 pub fn parse_list(
     el: &xmltree::Element,
