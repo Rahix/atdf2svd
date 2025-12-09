@@ -1,4 +1,6 @@
 #![deny(clippy::as_conversions)]
+// TODO: Remove this at some point when the rustc feature is less new
+#![allow(clippy::collapsible_if)]
 
 #[macro_use]
 pub mod error;
