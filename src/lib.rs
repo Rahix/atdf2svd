@@ -1,3 +1,5 @@
+#![deny(clippy::as_conversions)]
+
 #[macro_use]
 pub mod error;
 #[cfg(feature = "cli")]

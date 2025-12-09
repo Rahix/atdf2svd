@@ -5,7 +5,10 @@ use std::convert::TryInto;
 pub fn generate(f: &chip::Field) -> crate::Result<svd_rs::Field> {
     let (write_constraint, enumerated_values) =
         svd::restriction::generate(&f.restriction, f.width().try_into()?)?;
-    let (lsb, msb) = (f.range.0 as u32, f.range.1 as u32);
+    let (lsb, msb) = (
+        u32::try_from(f.range.0).unwrap(),
+        u32::try_from(f.range.1).unwrap(),
+    );
 
     let field = svd_rs::FieldInfo::builder()
         .name(f.name.clone())
