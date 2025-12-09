@@ -12,7 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the `remove_fuse_and_lockbit` auto-patch which removes the `FUSE` and
   `LOCKBIT` peripherals entirely ([#82]).  Again useful for hardware debuggers.
 
+### Fixed
+- Fixed potential undetected partial writes of the SVD file ([#92]).
+
 [#82]: https://github.com/Rahix/atdf2svd/pull/82
+[#92]: https://github.com/Rahix/atdf2svd/pull/92
 
 
 ## [0.5.1] - 2025-05-04
