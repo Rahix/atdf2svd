@@ -51,8 +51,8 @@ pub fn parse(el: &xmltree::Element) -> crate::Result<chip::Chip> {
 
     // Map interrupts from <usize, chip::Interrupt> to <std::string::String, chip::Interrupt>
     let interrupts = interrupts
-        .iter()
-        .map(|(_, int)| (int.name.clone(), int.clone()))
+        .values()
+        .map(|int| (int.name.clone(), int.clone()))
         .collect();
 
     Ok(chip::Chip {

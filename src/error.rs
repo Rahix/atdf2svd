@@ -1,7 +1,7 @@
 pub trait DisplayError {
     fn format(&self, w: &mut dyn std::io::Write) -> std::io::Result<()>;
 
-    fn into_panic(&self) -> ! {
+    fn to_panic(&self) -> ! {
         let mut message: Vec<u8> = "Error: ".into();
         self.format(&mut message).unwrap();
         panic!("{}", String::from_utf8_lossy(&message));
