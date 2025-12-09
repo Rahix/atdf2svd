@@ -14,6 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: cargo clippy -- -Dwarnings
       - run: cargo run -- tests/atmega328p.atdf /dev/null
 
   test:
