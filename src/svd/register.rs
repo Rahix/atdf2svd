@@ -22,7 +22,7 @@ pub fn generate(r: &chip::Register, base: u32) -> crate::Result<svd_rs::Register
         .alternate_group(r.mode.clone());
 
     let mut fields = r.fields.values().collect::<Vec<_>>();
-    fields.sort_by(|a, b| a.range.0.cmp(&b.range.0));
+    fields.sort_by_key(|a| a.range.0);
 
     let fields = fields
         .into_iter()

@@ -7,7 +7,7 @@ pub fn generate(peripherals: &mut [svd_rs::Peripheral], c: &chip::Chip) -> crate
     for peripheral in peripherals.iter_mut() {
         if peripheral.name == "CPU" {
             let mut interrupts = c.interrupts.values().collect::<Vec<_>>();
-            interrupts.sort_by(|a, b| a.index.cmp(&b.index));
+            interrupts.sort_by_key(|a| a.index);
 
             let interrupts = interrupts
                 .into_iter()

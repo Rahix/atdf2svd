@@ -35,7 +35,7 @@ pub fn generate(
         ),
         chip::ValueRestriction::Enumerated(v) => {
             let mut values = v.values().collect::<Vec<_>>();
-            values.sort_by(|a, b| a.value.cmp(&b.value));
+            values.sort_by_key(|a| a.value);
 
             let values = values
                 .into_iter()

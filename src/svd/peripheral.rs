@@ -4,7 +4,7 @@ use std::convert::TryInto;
 
 fn create_address_blocks(p: &chip::Peripheral) -> crate::Result<Option<Vec<svd_rs::AddressBlock>>> {
     let mut registers: Vec<_> = p.registers.values().collect();
-    registers.sort_by(|a, b| a.address.cmp(&b.address));
+    registers.sort_by_key(|a| a.address);
 
     let base = p.base_address().expect("no base address");
     let new_address_block = |offset: usize, size| {
