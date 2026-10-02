@@ -17,7 +17,7 @@ pub fn parse(
     let description = bitfield_el
         .attributes
         .get("caption")
-        .and_then(|d| if !d.is_empty() { Some(d) } else { None })
+        .filter(|&d| !d.is_empty())
         .cloned();
     let values = bitfield_el.attributes.get("values");
 

@@ -15,7 +15,7 @@ pub fn parse(interrupt: &xmltree::Element) -> crate::Result<chip::Interrupt> {
     let description = interrupt
         .attributes
         .get("caption")
-        .and_then(|d| if !d.is_empty() { Some(d) } else { None })
+        .filter(|&d| !d.is_empty())
         .cloned();
 
     Ok(chip::Interrupt {

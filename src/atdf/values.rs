@@ -29,7 +29,7 @@ pub fn parse_value_groups(module_el: &xmltree::Element) -> crate::Result<ValueGr
             let description = value_el
                 .attributes
                 .get("caption")
-                .and_then(|d| if !d.is_empty() { Some(d) } else { None })
+                .filter(|&d| !d.is_empty())
                 .cloned();
             let value = util::parse_int(value_el.attr("value")?)?;
 

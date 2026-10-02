@@ -27,13 +27,13 @@ pub fn parse(
     let description = el
         .attributes
         .get("caption")
-        .and_then(|d| if !d.is_empty() { Some(d) } else { None })
+        .filter(|&d| !d.is_empty())
         .cloned();
 
     let mode = el
         .attributes
         .get("modes")
-        .and_then(|d| if !d.is_empty() { Some(d) } else { None })
+        .filter(|&d| !d.is_empty())
         .cloned();
 
     let access = if let Some(access) = el.attributes.get("rw") {
